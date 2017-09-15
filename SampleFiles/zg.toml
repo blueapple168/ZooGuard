@@ -1,0 +1,6 @@
+[http]
+	HttpEnabled = true
+	HttpPort = 9001
+
+[Zgconf]
+	Pgxcctl_conf_file = "c:\\zg\\pgxc_ctl.conf"
