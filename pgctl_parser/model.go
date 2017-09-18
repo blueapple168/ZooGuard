@@ -8,7 +8,7 @@ type pgctl_staging_config struct {
 	TmpDir         string
 	LocalTmpDir    string
 	DataDirRoot    string
-	PgxcInstallDir []string
+	PgxcInstallDir string
 
 	// Backup
 	ConfigBackup     bool
@@ -20,7 +20,7 @@ type pgctl_staging_config struct {
 	// GTM Master
 	GtmName                      string
 	GtmMasterServer              string
-	GtmMasterPort                int
+	GtmMasterPort                string
 	GtmMasterDir                 string
 	GtmExtraConfig               string
 	GtmMasterSpecificExtraConfig string
@@ -32,7 +32,7 @@ type pgctl_staging_config struct {
 	GtmSlaveServer              string
 	GtmSlavePort                string
 	GtmSlaveDir                 string
-	GtmSlaveSpecificExtraConfig []string
+	GtmSlaveSpecificExtraConfig string
 
 
 

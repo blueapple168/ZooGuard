@@ -15,7 +15,7 @@ type pgxc_cluster struct {
 	ConfigBackupFile string
 	ConfigBackupHost string
 	ConfigBackupDir  string
-	HasGtmProxy      bool
+
 
 	// GTM Proxy
 	GtmProxyDir string
@@ -38,10 +38,11 @@ type pgxc_cluster struct {
 
 	GtmMaster gtm_master
 
-	HasGTMSlave bool
+	HasGtmSlave bool
 	GtmSlave    gtm_slave
+	GtmPxyExtraConfig string
 
-	HasGTMProxy bool
+	HasGtmProxy      bool
 	GTMProxies  []gtm_proxy
 
 	Coord []coordinator_master
@@ -53,6 +54,8 @@ type pgxc_cluster struct {
 
 	HasDatanodeSlaves bool
 	DatanodeSlaves    []datanode_slave
+
+	ServersList		[]string
 }
 
 type gtm_master struct {
@@ -60,7 +63,7 @@ type gtm_master struct {
 	// GTM Master
 	GtmName                      string
 	GtmMasterServer              string
-	GtmMasterPort                int
+	GtmMasterPort                string
 	GtmMasterDir                 string
 	GtmExtraConfig               string
 	GtmMasterSpecificExtraConfig string
@@ -86,7 +89,6 @@ type gtm_proxy struct {
 	GtmProxyServer    string
 	GtmProxyPort      string
 	GtmProxyDir       string
-	GtmPxyExtraConfig string
 }
 
 type coordinator_master struct {
@@ -110,27 +112,26 @@ type coordinator_master struct {
 type coordinator_slave struct {
 
 	// Coordinator Slaves
-	CoordSlaveDir         string
-	CoordSlaveServers     string
-	CoordSlavePoolerPorts int
-	CoordSlaveSync        bool
-	CoordSlaveDirs        string
-	CoordSlavePorts       int
-	CoordPgHbaEntries     string
+	CoordSlaveServer     string
+	CoordSlavePoolerPort string
+	CoordSlaveSync       bool
+	CoordSlaveDir        string
+	CoordSlavePort       string
+	CoordPgHbaEntrie     string
 }
 
 type datanode_master struct {
-	DatanodeNames         string
-	DatanodeMasterServers string
-	DatanodePorts         int
-	DatanodePoolerPorts   int
-	DatanodeMasterDirs    string
-	DatanodeMasterWALDirs string
-	DatanodeMaxWALSenders string
-	DatanodeArchLogDirs   string
+	DatanodeName         string
+	DatanodeMasterServer string
+	DatanodePort         string
+	DatanodePoolerPort   string
+	DatanodeMasterDir    string
+	DatanodeMasterWALDir string
+	DatanodeMaxWALSender string
+	DatanodeArchLogDir   string
 
 	DatanodeExtraConfig         string
-	DatanodePgHbaEntries        string
+	DatanodePgHbaEntry          string
 	DatanodeSpecificExtraPgHba  string
 	DatanodeSpecificExtraConfig string
 
@@ -142,6 +143,6 @@ type datanode_slave struct {
 	DatanodeSlave           bool
 	DatanodeSlaveServer     string
 	DatanodeSlaveDir        string
-	DatanodeSlavePort       int
-	DatanodeSlavePoolerPort int
+	DatanodeSlavePort       string
+	DatanodeSlavePoolerPort string
 }

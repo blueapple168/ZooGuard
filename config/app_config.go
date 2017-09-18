@@ -87,11 +87,6 @@ func GetConfig() (ZgConfig){
 
 	configLoaded = true
 
-
-	fmt.Println(Config)
-
-	// Show all configuration...
-	fmt.Println("Pulled config info")
 	return Config
 }
 
@@ -118,7 +113,6 @@ func getConfigFile() (retFilePath string, retErrors []error) {
 	var flagConfigFile string
 	flag.StringVar(&flagConfigFile, "config_file", "", "Customize the path of the configuration file using this flag.")
 	flag.Parse()
-	fmt.Println("The flag config file", flagConfigFile)
 
 	envConfigFile := os.Getenv("ZG_CONFIG_FILE")
 
@@ -141,8 +135,6 @@ func getConfigFile() (retFilePath string, retErrors []error) {
 			for _, curFolder := range windowsConfigFolders {
 
 				curFile := curDrive + ":" + curFolder + configFile
-
-				fmt.Println("Checking for ", curFile)
 
 				if fileExists(curFile) {
 
@@ -232,8 +224,6 @@ func fileExists(curFile string) (retBool bool) {
 
 		fmt.Println("Error locating file, " + curFile, err.Error())
 	}
-
-
 
 	return
 }
