@@ -13,7 +13,7 @@ func main() {
 
 	AppConf := config.GetConfig()
 
-	k := pgctl_parser.Pgctl_parser{FileLocation: AppConf.Zgconf.Pgxcctl_conf_file}
+	k := pgctl_parser.Pgctl_parser{FiledLocation: AppConf.Zgconf.Pgxcctl_conf_file}
 
 	k.Prase()
 
