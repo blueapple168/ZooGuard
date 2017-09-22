@@ -5,6 +5,8 @@ import
 	"github.com/dminGod/ZooGuard/config"
 	"github.com/dminGod/ZooGuard/pgctl_parser"
 	"github.com/dminGod/ZooGuard/cl_render"
+	"net/http"
+
 )
 
 
@@ -13,7 +15,7 @@ func main() {
 
 	AppConf := config.GetConfig()
 
-	k := pgctl_parser.Pgctl_parser{FiledLocation: AppConf.Zgconf.Pgxcctl_conf_file}
+	k := pgctl_parser.Pgctl_parser{  FileLocation: AppConf.Zgconf.Pgxcctl_conf_file }
 
 	k.Prase()
 
@@ -23,5 +25,12 @@ func main() {
 	cl_render.RenderIssuesTable(k)
 
 
-}
 
+  fs := http.FileServer(http.Dir("static_content"))
+  http.Handle("/", fs)
+
+ 
+  http.ListenAndServe(":3000", nil)
+
+
+}
