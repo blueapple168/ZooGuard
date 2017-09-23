@@ -1,1 +1,354 @@
-<h1>Hello world   444444444444</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>ZooGuard</title>
+
+<body ng-app="zg" >
+
+<nav class="navbar navbar-default navbar-fixed-top">
+	<div class="container">
+	<div class="collapse navbar-collapse" id="navbarCollapse">
+
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="#"><i class="fa fa-map-o fa-lg"></i> Cluster View</a></li>
+            
+            <!--
+            <li><a href="#about">SQL Queries</a></li>
+ 
+            
+            <li><a href="#contact">Contact</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="#">Action</a></li>
+                <li><a href="#">Another action</a></li>
+                <li><a href="#">Something else here</a></li>
+                <li role="separator" class="divider"></li>
+                <li class="dropdown-header">Nav header</li>
+                <li><a href="#">Separated link</a></li>
+                <li><a href="#">One more separated link</a></li>
+              </ul>
+            </li> -->
+          </ul>
+          <ul class="nav navbar-nav navbar-right"  style="position: relative; left: -100px;" >
+	<a class="navbar-brand" href="#">
+		<img src="imgs/zg_logo.png" style="height: 100px;" />
+	</a>
+
+
+
+            <!--
+            <li><a href="../navbar/">Default</a></li>
+            <li><a href="../navbar-static-top/">Static top</a></li> 
+            <li class="active"><a href="./"><i class="fa fa-sign-out fa-lg"></i> Signout <span class="sr-only">(current)</span></a></li>
+          -->
+          </ul>
+        </div><!--/.nav-collapse -->
+
+
+</div>
+</div>
+	</nav>
+
+	
+<div ng-controller="BaseController" class="container" style="padding-top: 50px;">
+	
+<div class="machine" id="m3"> 
+
+<span class="server_ip" style="color: red">
+<i class="fa fa-circle fa-lg"></i>
+192.168.2.3</span>
+
+	<div class="gtm_slave" id="gtm_slave1"> 
+	<i class="fa fa-globe fa-lg"></i>
+	gtm_slave</div>
+</div>
+
+<br/>
+
+<div class="machine" id="m2"> 
+<span class="server_ip" style="color: #2b7c02">
+<i class="fa fa-server fa-lg"></i>
+192.168.2.3</span>
+
+	
+<div class="gtm" id="gtm1">
+	  <i class="fa fa-globe fa-lg"></i>
+		gtm1</div>
+</div>
+
+
+<br/>
+
+<div class="machine" id="m1"> 
+<span class="server_ip">
+<i class="fa fa-server fa-lg"></i>
+192.168.2.3</span>	
+
+
+	<div class="gtm_proxy" id="gp1">
+	<i class="fa fa-random fa-lg"></i>
+	gtm_proxy1</div>
+	
+	<div class="gtm_proxy" id="gp2">
+	<i class="fa fa-random fa-lg"></i>
+	gtm_proxy2</div>
+
+	<br/><div class="coord" id="c1">
+<i class="fa fa-sitemap fa-lg"></i>
+	c1</div>
+
+</div>
+
+
+<div class="machine" id="m1"> 
+<span class="server_ip">
+<i class="fa fa-server fa-lg"></i>
+192.168.2.3</span>
+	
+	<div class="gtm_proxy" id="gp4">
+<i class="fa fa-random fa-lg"></i>
+	gtm_proxy2</div>
+	<div class="gtm_proxy" id="gp3">
+<i class="fa fa-random fa-lg"></i>
+	gtm_proxy3</div>
+
+	<br/>
+	<div class="coord" id="c2">
+<i class="fa fa-sitemap fa-lg"></i>
+	c2</div>
+
+</div>
+
+<div class="machine" id="m1"> 
+<span class="server_ip">
+<i class="fa fa-server fa-lg"></i>
+192.168.2.3</span>
+
+
+	<div class="gtm_proxy" id="gp5">
+<i class="fa fa-random fa-lg"></i>
+	gtm_proxy5</div>
+	<div class="gtm_proxy" id="gp6">
+<i class="fa fa-random fa-lg"></i>
+	gtm_proxy6</div>
+
+	<br/>
+
+	<div class="coord" id="c3">
+<i class="fa fa-sitemap fa-lg"></i>
+	c3</div>
+
+</div>
+
+<div class="machine" id="m1"> 
+<span class="server_ip">
+<i class="fa fa-server fa-lg"></i>
+192.168.2.3</span>
+
+
+	<div class="gtm_proxy" id="gp7">
+<i class="fa fa-random fa-lg"></i>
+	gtm_proxy7</div>
+	<div class="gtm_proxy" id="gp8">
+<i class="fa fa-random fa-lg"></i>
+	gtm_proxy8</div>
+
+	<br/><div class="coord" id="c4">
+<i class="fa fa-sitemap fa-lg"></i>
+	c4</div>
+
+</div>
+
+<br/>
+
+<div class="machine" id="m1"> 
+<span class="server_ip">
+<i class="fa fa-server fa-lg"></i>
+192.168.2.3</span>
+	
+	<div class="datanode_m" id="dn1">
+<i class="fa fa-database fa-lg"></i>
+	dn1</div>
+</div>
+
+
+<div class="machine" id="m1"> 
+<span class="server_ip">
+<i class="fa fa-server fa-lg"></i>
+192.168.2.3</span>
+	
+	<div class="datanode_m" id="dn2">
+<i class="fa fa-database fa-lg"></i>
+	dn2</div>
+</div>
+
+<div class="machine" id="m1"> 
+<span class="server_ip">
+<i class="fa fa-server fa-lg"></i>
+192.168.2.3</span>
+	
+	<div class="datanode_m" id="dn3">
+<i class="fa fa-database fa-lg"></i>
+	dn3</div>
+</div>
+
+
+<div class="machine" id="m1"> 
+<span class="server_ip">
+<i class="fa fa-server fa-lg"></i>
+192.168.2.3</span>
+	
+	<div class="datanode_m" id="dn4"> 
+<i class="fa fa-database fa-lg"></i>
+	dn4 </div>
+</div>
+
+
+<div class="machine" id="m1"> 
+<span class="server_ip">
+<i class="fa fa-server fa-lg"></i>
+192.168.2.3</span>
+	
+	<div class="datanode_m" id="dn5"> 
+<i class="fa fa-database fa-lg"></i>
+	dn5 </div>
+</div>
+
+
+<div class="machine" id="m1"> 
+<span class="server_ip">
+<i class="fa fa-server fa-lg"></i>
+192.168.2.3</span>
+	
+	<div class="datanode_m" id="dn6"> 
+<i class="fa fa-database fa-lg"></i>
+	dn6 </div>
+</div>
+
+
+<div class="machine" id="m1"> 
+<span class="server_ip">
+<i class="fa fa-server fa-lg"></i>
+192.168.2.3</span>
+
+	<div class="datanode_m" id="dn7"> 
+<i class="fa fa-database fa-lg"></i>
+	dn7 </div>
+</div>
+
+
+
+<br/>
+
+<div class="machine" id="m1"> 
+<span class="server_ip">
+<i class="fa fa-server fa-lg"></i>
+192.168.2.3</span>
+	
+	<div class="datanode_sl" id="ds1"> 
+<i class="fa fa-life-saver fa-lg"></i>
+	ds1 </div>
+</div>
+
+
+<div class="machine" id="m1"> 
+<span class="server_ip">
+<i class="fa fa-server fa-lg"></i>
+192.168.2.3</span>
+	
+	<div class="datanode_sl" id="ds2"> 
+<i class="fa fa-life-saver fa-lg"></i>
+	ds2 </div>
+</div>
+
+
+<div class="machine" id="m1"> 
+<span class="server_ip">
+<i class="fa fa-server fa-lg"></i>
+192.168.2.3</span>
+
+	<div class="datanode_sl" id="ds3"> 
+<i class="fa fa-life-saver fa-lg"></i>
+	ds3 </div>
+</div>
+
+<div class="machine" id="m1"> 
+<span class="server_ip">
+<i class="fa fa-server fa-lg"></i>
+192.168.2.3</span>
+	
+	<div class="datanode_sl" id="ds4"> 
+<i class="fa fa-life-saver fa-lg"></i>
+	ds4 </div>
+</div>
+
+
+<div class="machine" id="m1"> 
+<span class="server_ip">
+<i class="fa fa-server fa-lg"></i>
+192.168.2.3</span>
+	
+	<div class="datanode_sl" id="ds5">
+<i class="fa fa-life-saver fa-lg"></i>
+	 ds5 </div>
+</div>
+
+
+<div class="machine" id="m1"> 
+<span class="server_ip">
+<i class="fa fa-server fa-lg"></i>
+192.168.2.3</span>
+
+	<div class="datanode_sl" id="ds6"> 
+<i class="fa fa-life-saver fa-lg"></i>
+	ds6 </div>
+</div>
+
+<div class="machine" id="m1"> 
+<span class="server_ip">
+<i class="fa fa-server fa-lg"></i>
+192.168.2.3</span>
+
+	<div class="datanode_sl" id="ds7"> 
+<i class="fa fa-life-saver fa-lg"></i>
+	ds7 </div>
+</div>
+
+
+
+
+
+
+
+
+</div>
+<script type="text/javascript" src="libs/angular.js"></script>
+
+<link rel="stylesheet" href="css/bootstrap.css"/>
+
+
+<link rel="stylesheet" href="css/connection.css"/>
+<link rel="stylesheet" href="css/zg.css"/>
+
+
+<link rel="stylesheet" href="css/font-awesome/css/font-awesome.min.css">
+
+
+<script type="text/javascript" src="libs/jq.js"></script>
+<script src="libs/jq_connections.js"></script>
+
+
+<script type="text/javascript" src="libs/bootstrap.js"></script>
+
+
+<script type="text/javascript" src="libs/us.js"></script>
+<script type="text/javascript" src="modules/home_screen.js"></script>
+
+
+<script type="text/javascript" src="modules/jq_conn.js"></script>
+
+</head>
+
+</body>
+</html>

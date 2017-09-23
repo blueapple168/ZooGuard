@@ -1,0 +1,101 @@
+div.machine {
+	
+	margin: 10px;
+	padding : 5px;
+	padding-top: 10px;
+	border : thin solid #cda2d3;
+	border-radius: 3px;
+	display: inline-block;
+	position: relative;
+}
+
+span.server_ip {
+
+	font-size: 9px;
+	position: absolute;
+	top: -5px;
+	background-color: white;
+}
+
+div.coord {
+
+	z-index: 100;
+	margin: 5px;
+	padding: 5px;
+	width: 100px;
+	color: #4d5916;
+	border-radius: 5px;
+	border : thin solid #7c8e26;
+	background-color: #dcfc4b;
+	display: inline-block;
+}
+
+div.datanode_m {
+
+	z-index: 10;
+	margin: 5px;
+	padding: 5px;
+	width: 100px;
+
+	color: #fff977;
+	border: thin solid #fff977;
+	border-radius: 3px;
+	background-color: #198c08;
+	display: inline-block;
+}
+
+
+div.datanode_sl {
+	
+	z-index: 10;
+	margin: 5px;
+	padding: 5px;
+	width: 100px;
+
+	color: #828481;
+	border: thin solid #828481;
+	border-radius: 3px;
+	background-color: #88ff84;
+	display: inline-block;
+}
+
+
+div.gtm_proxy {
+
+	z-index: 10;
+	margin: 5px;
+	padding: 5px;
+	width: 100px;
+	font-size: 12px;
+
+	border-radius: 3px;
+	color: #63462f;
+	border : thin solid #a87f5f;	
+	background-color: #f9bb8b;
+	display: inline-block;	
+}
+
+div.gtm {
+
+	z-index: 10;
+	margin: 5px;
+	padding: 5px;
+	color: #12284c;
+	border-radius: 3px;
+	border : thin solid #b4caed;
+	background-color: #cee1ff;
+	display: inline-block;	
+}
+
+div.gtm_slave {
+
+	margin: 5px;
+	padding: 5px;
+	color: white;
+	border-radius: 3px;
+	color : #a6a7a8;
+	border : thin solid #a6a7a8;
+	background-color: #eaeff7;
+	display: inline-block;	
+}
+

@@ -6,7 +6,7 @@ import
 	"github.com/dminGod/ZooGuard/pgctl_parser"
 	"github.com/dminGod/ZooGuard/cl_render"
 	"net/http"
-
+	"fmt"
 )
 
 
@@ -25,11 +25,11 @@ func main() {
 	cl_render.RenderIssuesTable(k)
 
 
-
+ 
   fs := http.FileServer(http.Dir("static_content"))
   http.Handle("/", fs)
 
- 
+  fmt.Println("Serving on 3000")
   http.ListenAndServe(":3000", nil)
 
 
