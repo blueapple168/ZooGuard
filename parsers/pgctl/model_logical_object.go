@@ -16,7 +16,6 @@ type pgxc_cluster struct {
 	ConfigBackupHost string
 	ConfigBackupDir  string
 
-
 	// GTM Proxy
 	GtmProxyDir string
 
@@ -85,6 +84,7 @@ type gtm_slave struct {
 }
 
 type gtm_proxy struct {
+
 	GtmProxyName      string
 	GtmProxyServer    string
 	GtmProxyPort      string
@@ -92,6 +92,7 @@ type gtm_proxy struct {
 }
 
 type coordinator_master struct {
+
 	CoordName         string
 	CoordMasterServer string
 	CoordPort         string
@@ -121,6 +122,7 @@ type coordinator_slave struct {
 }
 
 type datanode_master struct {
+
 	DatanodeName         string
 	DatanodeMasterServer string
 	DatanodePort         string
@@ -140,6 +142,7 @@ type datanode_master struct {
 }
 
 type datanode_slave struct {
+
 	DatanodeSlave           bool
 	DatanodeSlaveServer     string
 	DatanodeSlaveDir        string

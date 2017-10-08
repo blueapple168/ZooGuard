@@ -1,8 +1,106 @@
 package pgctl_parser
 
 import (
+	"os"
+	"bufio"
+	"fmt"
+	"regexp"
+	"strings"
 	"errors"
+	"github.com/dminGod/ZooGuard/log_collectors"
 )
+
+type Pgctl_parser struct {
+
+	FileLocation string
+	RawConfig map[string]string
+	St pgctl_staging_config
+	Cluster pgxc_cluster
+	PopulateErrs []error
+
+}
+
+func (p *Pgctl_parser) Init() {
+
+	p.RawConfig = make(map[string]string)
+}
+
+
+
+func (p *Pgctl_parser) Prase() {
+
+	// TODO : getting files directly is not correct -- make an abstraction that will return you
+	// This guy should not be bothered to get stuff from other systems on the network
+	// There's got to be bus layer that will do the work of :
+
+	// 	talk to particular kind of servers and get things for you
+	//	send out messages to particular servers or type of servers
+	// 	the underlying communication layer could be ssh and command
+	//	client running on the side
+	// 	running a command on the local server
+
+	// 	1) Get stuff for you
+			// 1) Read from a file
+			// 2) SSH into a remote server and return the file
+			// 3) Get it directly passed as text so the
+
+	// 	2) Send commands over the network for you
+
+	file, err := os.Open(p.FileLocation)
+	if err != nil {
+
+		fmt.Println("Error while reading file", err)
+
+	}
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+
+
+	// Fist take all the lines and put them in the RawConfig, so the override happens of the configuration
+	// Where its put in multiple times and we have the last most recent value
+	for scanner.Scan() {             // internally, it advances token based on sperator
+
+		p.interpret_line(scanner.Text())
+	}
+
+	// Now that we have a variable to value mapping. Lets start filling our object
+	p.Populate()
+}
+
+func (p *Pgctl_parser) Parse_string(str string) {
+
+	str = log_collectors.GetPgxcConfig()
+
+	for _, v := range strings.Split(str, "\n") {
+
+		p.interpret_line(v)
+		fmt.Println(v)
+	}
+
+	p.Populate()
+}
+
+// Individual Line parsing, remove the comments, keep the key-value pairs
+func (p *Pgctl_parser) interpret_line(curLine string){
+
+	matBool, _ := regexp.Match("^( +|\t+)?[#-]", []byte(curLine))
+	hasEqualTo := strings.Contains(curLine, "=")
+
+	charsLen := len(strings.Replace(strings.Replace(curLine, " ", "", -1), "\t", "", -1))
+
+	if matBool == false && charsLen > 0 && hasEqualTo{
+
+		remHash := strings.Split(curLine, "#")
+
+		kvPair := strings.Split(remHash[0], "=")
+
+		if len(kvPair) > 1 {
+
+			p.RawConfig[kvPair[0]] = kvPair[1]
+		}
+	}
+}
 
 // This module will take the individual lines and start populating objects based on the lines
 func (p *Pgctl_parser) Populate() {
@@ -251,7 +349,8 @@ func (p *Pgctl_parser) MapToObj() {
 	coordsOkay := countsMatch(p.St.CoordMasterServers, p.St.CoordMasterDirs, p.St.PoolerPorts, p.St.CoordPorts)
 	coordSlOkay := true
 
-	dnOkay := countsMatch(p.St.DatanodeMasterServers, p.St.DatanodeMasterDirs, p.St.DatanodeMasterWALDirs)
+//	dnOkay := countsMatch(p.St.DatanodeMasterServers, p.St.DatanodeMasterDirs, p.St.DatanodeMasterWALDirs)
+	dnOkay := countsMatch(p.St.DatanodeMasterServers, p.St.DatanodeMasterDirs)
 	dnSlOkay := true
 
 	if p.St.CoordSlave {
@@ -267,6 +366,12 @@ func (p *Pgctl_parser) MapToObj() {
 	if coordsOkay == false || coordSlOkay == false || dnOkay == false || dnSlOkay == false {
 
 		p.PopulateErrs = append(p.PopulateErrs, errors.New("There is a mismatch found in pgxc_ctl.conf"))
+		fmt.Println("Coord", coordsOkay)
+		fmt.Println("Coord Sl", coordSlOkay)
+		fmt.Println("DN", dnOkay)
+		fmt.Println("DN Sl Coords", dnSlOkay)
+
+
 		return
 	}
 
@@ -391,7 +496,7 @@ func (p *Pgctl_parser) MapToObj() {
 		p.Cluster.Coord = append(p.Cluster.Coord, coordinator_master{
 			CoordName: p.St.CoordNames[i],
 			CoordMasterServer: v,
-			CoordArchLogDir: p.St.CoordArchLogDirs[i],
+//			CoordArchLogDir: p.St.CoordArchLogDirs[i],
 			CoordMasterDir: p.St.CoordMasterDirs[i],
 			CoordPort: p.St.CoordPorts[i],
 			PoolerPort: p.St.PoolerPorts[i],
@@ -422,9 +527,9 @@ func (p *Pgctl_parser) MapToObj() {
 			DatanodeMasterServer: v,
 			DatanodeMasterDir: p.St.DatanodeMasterDirs[i],
 			DatanodePort: p.St.DatanodePorts[i],
-			DatanodeArchLogDir: p.St.DatanodeArchLogDirs[i],
+//			DatanodeArchLogDir: p.St.DatanodeArchLogDirs[i],
 			DatanodePoolerPort: p.St.DatanodePoolerPorts[i],
-			DatanodeMasterWALDir: p.St.DatanodeMasterWALDirs[i],
+//			DatanodeMasterWALDir: p.St.DatanodeMasterWALDirs[i],
 			HasSlave: p.St.DatanodeSlave,
 			DatanodeSlave : tmp_dn_slv,
 		})
@@ -438,5 +543,8 @@ func (p *Pgctl_parser) MapToObj() {
 			p.Cluster.ServersList = append(p.Cluster.ServersList, k)
 		}
 	}
+
+
+	fmt.Println(all_servers)
 
 }

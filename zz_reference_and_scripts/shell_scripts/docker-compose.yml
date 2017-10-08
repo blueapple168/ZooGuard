@@ -1,0 +1,81 @@
+version: '2'
+
+services:
+  gtm:
+    container_name: gtm_m
+    hostname: gtm
+    image: dmingod/pgxc_centos66_base:gtm_m
+    command: bash -c "service sshd restart; su -c '/usr/local/pgsql/bin/pgxc_ctl start all' postgres; /bin/bash"
+    ports:
+      - "61022:22"
+    networks:
+      pgxc:
+        ipv4_address: 10.5.0.10
+    tty: true
+    depends_on:
+      - c1
+      - c2
+      - d1
+      - d2
+
+  c1:
+    container_name: c1
+    hostname: c1
+    image: dmingod/pgxc_centos66_base:c1
+    command: bash -c "service sshd restart; /bin/bash"
+    ports:
+      - "30001:30001"
+      - "62022:22"
+    networks:
+      pgxc:
+        ipv4_address: 10.5.0.11
+    tty: true
+
+
+  c2:
+    container_name: c2
+    hostname: c2
+    image: dmingod/pgxc_centos66_base:c2
+    command: bash -c "service sshd restart; /bin/bash"
+    ports:
+      - "30002:30002"
+      - "63022:22"
+    networks:
+      pgxc:
+        ipv4_address: 10.5.0.12
+    tty: true
+
+
+  d1:
+    container_name: d1
+    hostname: d1
+    image: dmingod/pgxc_centos66_base:d1
+    command: bash -c "service sshd restart; /bin/bash"
+    ports:
+      - "40001:40001"
+      - "64022:22"    
+    networks:
+      pgxc:
+        ipv4_address: 10.5.0.21
+    tty: true
+
+  d2:
+    container_name: d2
+    hostname: d2
+    image: dmingod/pgxc_centos66_base:d2
+    command: bash -c "service sshd restart; /bin/bash"
+    ports:
+      - "40002:40002"
+      - "65022:22"       
+    networks:
+      pgxc:
+        ipv4_address: 10.5.0.22
+    tty: true
+
+networks:
+  pgxc:
+    driver: bridge
+    ipam:
+     config:
+       - subnet: 10.5.0.0/16
+         gateway: 10.5.0.1

@@ -1,4 +1,4 @@
-package config
+package zg_config
 
 import (
 	"os"
@@ -10,14 +10,36 @@ import (
 	"strings"
 )
 
-
 type http struct {
+
 	HttpEnabled bool
 	HttpPort int
 }
 
+type Remote_server struct {
+
+	Ip_or_host string
+	Connection_method string // This will be password / key
+
+	Username string
+	Password string 	// Will be used if the way to connect is with password
+
+	Key_file_location string //
+
+	
+}
+
 type zg_configuration struct {
-	Pgxcctl_conf_file string
+
+	// How to fetch the pgxc_ctl file?
+	Ctl_file_is_remote bool	// if
+
+	// Remote pgxc_ctl file settings
+
+
+
+	Ctl_file_local_path string
+
 }
 
 type ZgConfig struct {

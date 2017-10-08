@@ -1,6 +1,8 @@
 
 	$(document).ready(function() {
 
+		window.make_cluster_connections = function() {
+
 		$('div#gtm1').connections({ to: 'div#gtm_slave1', tag: 'to_gtm_slave' });
 
 		$('div#c1').connections({ to: 'div#gp1', tag: 'coord_to_gtm_proxy' });
@@ -8,8 +10,6 @@
 
 		$('div#c3').connections({ to: 'div#gp5', tag: 'coord_to_gtm_proxy' });
 		$('div#c4').connections({ to: 'div#gp7', tag: 'coord_to_gtm_proxy' });
-
-
 
 		$('div#gp1').connections({ to: 'div#gtm1', tag: 'to_gtm' });
 		$('div#gp2').connections({ to: 'div#gtm1', tag: 'to_gtm' });
@@ -36,7 +36,6 @@
 		$('div#dn5').connections({ to: 'div#ds5', tag: 'dn_to_dn_slave' });
 		$('div#dn6').connections({ to: 'div#ds6', tag: 'dn_to_dn_slave' });
 		$('div#dn7').connections({ to: 'div#ds7', tag: 'dn_to_dn_slave' });
-
-
+		}
 
 	});

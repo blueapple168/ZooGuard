@@ -2,30 +2,40 @@ package main
 
 import
 (
-	"github.com/dminGod/ZooGuard/config"
-	"github.com/dminGod/ZooGuard/pgctl_parser"
-	"github.com/dminGod/ZooGuard/cl_render"
+	"github.com/dminGod/ZooGuard/parsers/pgctl"
+	"github.com/dminGod/ZooGuard/cli"
 	"net/http"
 	"fmt"
+	"github.com/dminGod/ZooGuard/log_collectors"
+	"github.com/kr/pretty"
 )
 
 
 func main() {
 
 
-	AppConf := config.GetConfig()
+	// AppConf := zg_config.GetConfig()
 
-	k := pgctl_parser.Pgctl_parser{  FileLocation: AppConf.Zgconf.Pgxcctl_conf_file }
+	k := pgctl_parser.Pgctl_parser{}
+	k.Init()
 
-	k.Prase()
+
+	k.Parse_string(log_collectors.GetPgxcConfig())
+
+	fmt.Printf("%# v",pretty.Formatter(k))
+
 
 	// If we have some errors here in parsing, send the user out
 
-	cl_render.RenderStatusTable(k)
-	cl_render.RenderIssuesTable(k)
 
 
- 
+
+	cli.RenderStatusTable(k)
+	cli.RenderIssuesTable(k)
+
+//	log_collectors.Collect()
+
+
   fs := http.FileServer(http.Dir("static_content"))
   http.Handle("/", fs)
 

@@ -1,0 +1,85 @@
+
+
+
+	Docker for a 3 node setup with :
+		1 GTM
+		2 Coordinator -- 2 GTM Proxies 1 for the coordinators and 1 for the datanodes 	
+		2 Datanodes -- Slaves on the reversed machines
+
+
+
+	Get the files with docker inside it:
+		Make a docker file from scratch?
+			Lets make a generic docker image for a certain type of node :
+				gtm 			-- will put pgxc on it
+				coord			-- 
+				datanode 		-- 
+				datanode_slave	--	
+
+
+			How to handle the datanode slave -- lets do this -- we will create a gtm, coord and dn first get that to work, then we'll see what to do
+
+
+			- Lets make a single common image for the different types of nodes with stuff already installed on it.
+			- Then we just need to make changes that are specific to the instance
+			- We will need to bootstrap this cluster first
+			- Add some script that will start the services
+
+
+			- okay, got it to work for one instance with everything working on one script till the installation of pgxc_ctl 
+
+
+			- Now, if the instance already has postgres-xl on it and has pgxc_ctl on it?
+				
+				- Basically you need to either get the node roles done correctly on boot by script independetly before they get into the cluster
+
+
+				- Or you need to have the instances just ready with everything they need
+					- So the whole cluster will be ready correctly as it needs to be with the right roles
+					- How do you enforce a static IP on boot of a docker machine?
+				
+
+
+				- What we can do is this. Get the instances to start 				
+				
+				- How do you install gtm on it?
+				- How do you install coordinator on it..?
+				- How do you install datanode on it?
+
+
+
+
+
+			- Dont want java on this -- put ansible, its useful 
+			- Have to do it for newer versions! also?
+			- Last part of that want to figure out, how to do it as postgres user?
+
+
+
+			- Start a new repository using the bases
+				- Setup the cluster correctly and give it the correct tags
+
+				
+				- sshd service should start when the service starts -- added chkconfig sshd on, service sshd start manually
+
+				- scp the known_hosts file from this machine to all the machines -- Did it from both the users
+
+
+				
+
+
+scp known_hosts 10.5.0.10:/home/postgres/.ssh/known_hosts;
+scp known_hosts 10.5.0.11:/home/postgres/.ssh/known_hosts;
+scp known_hosts 10.5.0.12:/home/postgres/.ssh/known_hosts;
+scp known_hosts 10.5.0.21:/home/postgres/.ssh/known_hosts;
+scp known_hosts 10.5.0.22:/home/postgres/.ssh/known_hosts;
+
+
+
+
+
+
+
+
+
+

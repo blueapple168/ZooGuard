@@ -3,7 +3,6 @@
 <head>
 <title>ZG</title>
 
-
 <link rel="apple-touch-icon" sizes="57x57" href="favicons/apple-icon-57x57.png">
 <link rel="apple-touch-icon" sizes="60x60" href="favicons/apple-icon-60x60.png">
 <link rel="apple-touch-icon" sizes="72x72" href="favicons/apple-icon-72x72.png">
@@ -30,7 +29,9 @@
 	<div class="collapse navbar-collapse" id="navbarCollapse">
 
           <ul class="nav navbar-nav">
-            <li class="active"><a href="#"><i class="fa fa-map-o fa-lg"></i> Cluster View</a></li>
+            <li class=""><a href="#"><i class="fa fa-home fa-lg"></i> </a></li>
+            <li class=""><a href="#cluster_view"><i class="fa fa-map-o fa-lg"></i> Cluster View</a></li>
+            <li class=""><a href="#/component_detail/server_one"><i class="fa fa-server fa-lg"></i> Components </a></li>
             
             <!--
             <li><a href="#about">SQL Queries</a></li>
@@ -70,303 +71,53 @@
 </div>
 	</nav>
 
+<div class="container">
+<div ng-view class="ngview_wrapper">
 	
-<div ng-controller="BaseController" class="container" style="padding-top: 50px;">
-	
-<div class="machine" id="m3"> 
 
-<span class="server_ip" style="color: red">
-<i class="fa fa-circle fa-lg"></i>
-192.168.2.3</span>
-
-	<div class="gtm_slave" id="gtm_slave1"> 
-	<i class="fa fa-globe fa-lg"></i>
-	gtm_slave</div>
-</div>
-
-<br/>
-
-<div class="machine" id="m2"> 
-<span class="server_ip" style="color: #2b7c02">
-<i class="fa fa-server fa-lg"></i>
-192.168.2.3</span>
-
-	
-<div class="gtm" id="gtm1">
-	  <i class="fa fa-globe fa-lg"></i>
-		gtm1</div>
-</div>
-
-
-<br/>
-
-<div class="machine" id="m1"> 
-<span class="server_ip">
-<i class="fa fa-server fa-lg"></i>
-192.168.2.3</span>	
-
-
-	<div class="gtm_proxy" id="gp1">
-	<i class="fa fa-random fa-lg"></i>
-	gtm_proxy1</div>
-	
-	<div class="gtm_proxy" id="gp2">
-	<i class="fa fa-random fa-lg"></i>
-	gtm_proxy2</div>
-
-	<br/><div class="coord" id="c1">
-<i class="fa fa-sitemap fa-lg"></i>
-	c1</div>
 
 </div>
-
-
-<div class="machine" id="m1"> 
-<span class="server_ip">
-<i class="fa fa-server fa-lg"></i>
-192.168.2.3</span>
-	
-	<div class="gtm_proxy" id="gp4">
-<i class="fa fa-random fa-lg"></i>
-	gtm_proxy2</div>
-	<div class="gtm_proxy" id="gp3">
-<i class="fa fa-random fa-lg"></i>
-	gtm_proxy3</div>
-
-	<br/>
-	<div class="coord" id="c2">
-<i class="fa fa-sitemap fa-lg"></i>
-	c2</div>
-
-</div>
-
-<div class="machine" id="m1"> 
-<span class="server_ip">
-<i class="fa fa-server fa-lg"></i>
-192.168.2.3</span>
-
-
-	<div class="gtm_proxy" id="gp5">
-<i class="fa fa-random fa-lg"></i>
-	gtm_proxy5</div>
-	<div class="gtm_proxy" id="gp6">
-<i class="fa fa-random fa-lg"></i>
-	gtm_proxy6</div>
-
-	<br/>
-
-	<div class="coord" id="c3">
-<i class="fa fa-sitemap fa-lg"></i>
-	c3</div>
-
-</div>
-
-<div class="machine" id="m1"> 
-<span class="server_ip">
-<i class="fa fa-server fa-lg"></i>
-192.168.2.3</span>
-
-
-	<div class="gtm_proxy" id="gp7">
-<i class="fa fa-random fa-lg"></i>
-	gtm_proxy7</div>
-	<div class="gtm_proxy" id="gp8">
-<i class="fa fa-random fa-lg"></i>
-	gtm_proxy8</div>
-
-	<br/><div class="coord" id="c4">
-<i class="fa fa-sitemap fa-lg"></i>
-	c4</div>
-
-</div>
-
-<br/>
-
-<div class="machine" id="m1"> 
-<span class="server_ip">
-<i class="fa fa-server fa-lg"></i>
-192.168.2.3</span>
-	
-	<div class="datanode_m" id="dn1">
-<i class="fa fa-database fa-lg"></i>
-	dn1</div>
-</div>
-
-
-<div class="machine" id="m1"> 
-<span class="server_ip">
-<i class="fa fa-server fa-lg"></i>
-192.168.2.3</span>
-	
-	<div class="datanode_m" id="dn2">
-<i class="fa fa-database fa-lg"></i>
-	dn2</div>
-</div>
-
-<div class="machine" id="m1"> 
-<span class="server_ip">
-<i class="fa fa-server fa-lg"></i>
-192.168.2.3</span>
-	
-	<div class="datanode_m" id="dn3">
-<i class="fa fa-database fa-lg"></i>
-	dn3</div>
-</div>
-
-
-<div class="machine" id="m1"> 
-<span class="server_ip">
-<i class="fa fa-server fa-lg"></i>
-192.168.2.3</span>
-	
-	<div class="datanode_m" id="dn4"> 
-<i class="fa fa-database fa-lg"></i>
-	dn4 </div>
-</div>
-
-
-<div class="machine" id="m1"> 
-<span class="server_ip">
-<i class="fa fa-server fa-lg"></i>
-192.168.2.3</span>
-	
-	<div class="datanode_m" id="dn5"> 
-<i class="fa fa-database fa-lg"></i>
-	dn5 </div>
-</div>
-
-
-<div class="machine" id="m1"> 
-<span class="server_ip">
-<i class="fa fa-server fa-lg"></i>
-192.168.2.3</span>
-	
-	<div class="datanode_m" id="dn6"> 
-<i class="fa fa-database fa-lg"></i>
-	dn6 </div>
-</div>
-
-
-<div class="machine" id="m1"> 
-<span class="server_ip">
-<i class="fa fa-server fa-lg"></i>
-192.168.2.3</span>
-
-	<div class="datanode_m" id="dn7"> 
-<i class="fa fa-database fa-lg"></i>
-	dn7 </div>
-</div>
-
-
-
-<br/>
-
-<div class="machine" id="m1"> 
-<span class="server_ip">
-<i class="fa fa-server fa-lg"></i>
-192.168.2.3</span>
-	
-	<div class="datanode_sl" id="ds1"> 
-<i class="fa fa-life-saver fa-lg"></i>
-	ds1 </div>
-</div>
-
-
-<div class="machine" id="m1"> 
-<span class="server_ip">
-<i class="fa fa-server fa-lg"></i>
-192.168.2.3</span>
-	
-	<div class="datanode_sl" id="ds2"> 
-<i class="fa fa-life-saver fa-lg"></i>
-	ds2 </div>
-</div>
-
-
-<div class="machine" id="m1"> 
-<span class="server_ip">
-<i class="fa fa-server fa-lg"></i>
-192.168.2.3</span>
-
-	<div class="datanode_sl" id="ds3"> 
-<i class="fa fa-life-saver fa-lg"></i>
-	ds3 </div>
-</div>
-
-<div class="machine" id="m1"> 
-<span class="server_ip">
-<i class="fa fa-server fa-lg"></i>
-192.168.2.3</span>
-	
-	<div class="datanode_sl" id="ds4"> 
-<i class="fa fa-life-saver fa-lg"></i>
-	ds4 </div>
-</div>
-
-
-<div class="machine" id="m1"> 
-<span class="server_ip">
-<i class="fa fa-server fa-lg"></i>
-192.168.2.3</span>
-	
-	<div class="datanode_sl" id="ds5">
-<i class="fa fa-life-saver fa-lg"></i>
-	 ds5 </div>
-</div>
-
-
-<div class="machine" id="m1"> 
-<span class="server_ip">
-<i class="fa fa-server fa-lg"></i>
-192.168.2.3</span>
-
-	<div class="datanode_sl" id="ds6"> 
-<i class="fa fa-life-saver fa-lg"></i>
-	ds6 </div>
-</div>
-
-<div class="machine" id="m1"> 
-<span class="server_ip">
-<i class="fa fa-server fa-lg"></i>
-192.168.2.3</span>
-
-	<div class="datanode_sl" id="ds7"> 
-<i class="fa fa-life-saver fa-lg"></i>
-	ds7 </div>
 </div>
 
 
 
 
 
-
-
-
-</div>
-<script type="text/javascript" src="libs/angular.js"></script>
-
+<!-- Vendor CSS -->
 <link rel="stylesheet" href="css/bootstrap.css"/>
+<link rel="stylesheet" href="css/font-awesome/css/font-awesome.min.css">
 
 
+<!-- App CSS Stuff -->
 <link rel="stylesheet" href="css/connection.css"/>
 <link rel="stylesheet" href="css/zg.css"/>
 
 
-<link rel="stylesheet" href="css/font-awesome/css/font-awesome.min.css">
 
-
+<!-- Vendor JS  -->
+<script type="text/javascript" src="libs/angular.js"></script>
+<script type="text/javascript" src="libs/ang_routes.js"></script>
 <script type="text/javascript" src="libs/jq.js"></script>
 <script src="libs/jq_connections.js"></script>
 
-
 <script type="text/javascript" src="libs/bootstrap.js"></script>
-
-
 <script type="text/javascript" src="libs/us.js"></script>
-<script type="text/javascript" src="modules/home_screen.js"></script>
 
-
+<!-- JQ Connection Code -->
 <script type="text/javascript" src="modules/jq_conn.js"></script>
+
+
+<!-- Bootstrap the App -->
+<script type="text/javascript" src="modules/app_bootstrap.js"></script>
+
+
+<!-- Module JS -->
+<script type="text/javascript" src="modules/ClusterView_ctrl.js"></script>
+<script type="text/javascript" src="modules/Home_ctrl.js"></script>
+<script type="text/javascript" src="modules/ClusterView_ctrl.js"></script>
+<script type="text/javascript" src="modules/ComponentList_ctrl.js"></script>
+<script type="text/javascript" src="modules/ComponentDetail_ctrl.js"></script>
+
 
 </head>
 

@@ -21,8 +21,6 @@
 ### Download the whole log file for the server for a particular day
 
 
-
-
 ### Run a grep on the logs for a particular day to search for keywords
 	- Optionally specify a -v option to exclude stuff
 

@@ -1,10 +1,10 @@
-package cl_render
+package cli
 
 import (
-	"github.com/dminGod/ZooGuard/pgctl_parser"
+	"fmt"
+	"github.com/dminGod/ZooGuard/parsers/pgctl"
 	"github.com/olekukonko/tablewriter"
 	"os"
-	"fmt"
 )
 
 // This file will show stuff on the command line
@@ -19,7 +19,6 @@ func RenderStatusTable(k pgctl_parser.Pgctl_parser) {
 
 	fmt.Println("-- Server Details --")
 	table.SetHeader([]string{"Server", "Component", "Component Name", "State", "Issues Count", "Port", "Data Dir"})
-
 
 	// Add GTM Details
 	data = append(data, []string{
@@ -79,7 +78,6 @@ func RenderIssuesTable(k pgctl_parser.Pgctl_parser) {
 	fmt.Println("-- Issues Details --")
 	table.SetHeader([]string{"Server", "Component", "Component Name", "Issue Code", "Issue Details"})
 
-
 	// Add GTM Details
 	data = append(data, []string{
 		k.Cluster.GtmMaster.GtmMasterServer, "GTM", k.Cluster.GtmMaster.GtmName, "Low HDD", "Check the HDD is very lowwwww asd  asdf as s sdf sdf"},
@@ -126,9 +124,3 @@ func RenderIssuesTable(k pgctl_parser.Pgctl_parser) {
 	table.AppendBulk(data)
 	table.Render()
 }
-
-
-
-
-
-
