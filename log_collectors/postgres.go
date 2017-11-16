@@ -3,7 +3,9 @@ package log_collectors
 import (
 
 	"golang.org/x/crypto/ssh"
+	"fmt"
 	"bytes"
+	"net"
 )
 
 func init() {
@@ -11,17 +13,25 @@ func init() {
 	clients = make(map[string]*ssh.Client)
 
 	config := &ssh.ClientConfig{
-		User: "root",
+		User: "serveradm",
 		Auth: []ssh.AuthMethod{
-			ssh.Password("password"),
+			ssh.Password("R3dh@t!@#"),
+		},
+		HostKeyCallback: func(hostname string, remote net.Addr, key ssh.PublicKey) error {
+			return nil
 		},
 	}
 
-	for _, v := range []string{ "10.5.0.10:22", "10.5.0.11:22", "10.5.0.12:22", "10.5.0.21:22", "10.5.0.22:22"} {
+	fmt.Println("Init lc")
+
+	for _, v := range []string{  "10.138.32.76:22"} {
 
 		c, err := ssh.Dial("tcp", v, config)
+		
 		if err != nil {
-
+			fmt.Println("Error during establishing connection : ", err)
+		} else {
+			fmt.Println("Added ip to config")
 		}
 
 		clients[v] = c
@@ -32,18 +42,20 @@ var clients map[string]*ssh.Client
 
 func Collect() {
 
-	for _, v := range []string{"cat /home/postgres/pgxc_ctl/pgxc_ctl.conf" } {
+	for _, v := range []string{"df -h" } {
 
-		for _, vv := range []string{ "10.5.0.10:22" } {
+		fmt.Println("calling the command now..")
+		for _, vv := range []string{ "10.138.32.76:22" } {
 
-			runCommand(vv, v)
+			s := runCommand(vv, v)
+			fmt.Println(s)
 		}
 	}
 }
 
 func GetPgxcConfig() (retStr string){
 
-	return runCommand("10.5.0.10:22", "cat /home/postgres/pgxc_ctl/pgxc_ctl.conf")
+	return runCommand("127.0.0.1:22", "cat /tmp/hello.txt")
 }
 
 
@@ -53,11 +65,20 @@ func runCommand(server string, cmd string) (retStr string){
 
 	if _, ok := clients[server]; ok {
 
-		session, _ := (clients[server]).NewSession()
+		fmt.Println("Getting session info and ssh")
+		session, err := (clients[server]).NewSession()
+
+		if err != nil {
+			fmt.Println("Error in running command", err)
+		}
 
 		session.Stdout = &stdoutBuf
 		session.Run(cmd)
 		retStr = stdoutBuf.String()
+		
+	} else {
+
+		fmt.Println("Unable to find server")
 	}
 
 	return

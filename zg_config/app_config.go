@@ -42,9 +42,41 @@ type zg_configuration struct {
 
 }
 
+
+type Server struct {
+	Server_name string
+	Server_ip string
+	Environment string
+	Ssh_user string
+	Ssh_password string
+}
+
+
+type App struct {
+	App_type string
+	App_unique_key string
+
+	Config_folder string
+	Config_file string
+
+	Component_name string
+ 	Installed_server string
+	App_port string
+	Grpc_port string
+	Http_port string
+
+	Cluster_servers []string
+	Seed_servers []string
+
+	Pgxc_ctl_server string
+}
+
+
 type ZgConfig struct {
 	Zgconf zg_configuration
 	Http http
+	Servers []Server
+	Apps []App
 }
 
 // Dont need to add the .toml in the name here
@@ -67,14 +99,65 @@ var Config ZgConfig
  */
 
 
+func init() {
+
+	GetConfiguration()
+
+}
+
+func GetConfiguration(){
+
+         configFile, err := getConfigFile()
+
+        if err != nil {
+
+                fmt.Println("There were errors during fetching application config")
+                for _, e := range err {
+
+                        fmt.Println(e.Error())
+                }
+
+                os.Exit(1)
+        }
+
+        ViConfig = viper.New()
+
+        ViConfig.SetConfigFile(configFile)
+        ViConfig.AutomaticEnv()
+
+        verr := ViConfig.ReadInConfig()
+
+        e2 := ViConfig.Unmarshal(&Config)
+
+        if e2 != nil {
+
+                fmt.Print("Error marshaling config ", e2)
+        }
+
+        if verr != nil {
+
+                fmt.Println("There was an error reading in configuration. Error : ", verr.Error())
+        }
+
+        configLoaded = true
+
+
+
+}
+
 func GetConfig() (ZgConfig){
 
 
 	if configLoaded == true {
 
 		return Config
+	} else {
+		GetConfiguration()
 	}
 
+	return Config
+
+/*
 	configFile, err := getConfigFile()
 
 	if err != nil {
@@ -108,8 +191,7 @@ func GetConfig() (ZgConfig){
 	}
 
 	configLoaded = true
-
-	return Config
+*/
 }
 
 func ShowConfig() {
