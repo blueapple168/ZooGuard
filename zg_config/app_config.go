@@ -76,7 +76,8 @@ type Database struct {
 
 	Username string
 	Password string
-	Database string
+	DatabaseName string
+	DatabaseType string
 	Host []string
 	
 }
