@@ -72,11 +72,21 @@ type App struct {
 }
 
 
+type Database struct {
+
+	Username string
+	Password string
+	Database string
+	Host []string
+	
+}
+
 type ZgConfig struct {
 	Zgconf zg_configuration
 	Http http
 	Servers []Server
 	Apps []App
+	Database []Database
 }
 
 // Dont need to add the .toml in the name here
