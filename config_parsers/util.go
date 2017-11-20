@@ -1,4 +1,4 @@
-package pgctl_parser
+package config_prasers
 
 import (
 	"strings"

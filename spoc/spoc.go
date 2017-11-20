@@ -4,7 +4,7 @@ import(
         "golang.org/x/crypto/ssh"
         "fmt"
         "net"
-	"github.com/dminGod/ZooGuard/zg_config"
+		"github.com/dminGod/ZooGuard/zg_config"
 )
 
 var clients map[string]*ssh.Client
