@@ -79,7 +79,12 @@ type Database struct {
 	DatabaseName string
 	DatabaseType string
 	Host []string
-	
+	Cassandra_NumConnectionsPerHost int
+	Cassandra_ConnectionTimeout int
+	Cassandra_SocketKeepAlive int
+	Cassandra_NumberOfQueryRetries int
+	Cassandra_ReadConsistency int
+	Cassandra_WriteConsistency int
 }
 
 type ZgConfig struct {
