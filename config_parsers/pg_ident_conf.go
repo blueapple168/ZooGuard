@@ -5,22 +5,20 @@ import (
 	"strings"
 )
 
-type pg_ident_entry struct  {
-
-	Mapname 		string
-	SystemUsername	string
-	PgUsername		string
+type pg_ident_entry struct {
+	Mapname        string
+	SystemUsername string
+	PgUsername     string
 }
 
 type pg_ident struct {
-
 	Invalid_Entries []string
-	Entries []pg_ident_entry
-	Server_name string
-	File_contents string
+	Entries         []pg_ident_entry
+	Server_name     string
+	File_contents   string
 }
 
-func (pg *pg_ident)parse() {
+func (pg *pg_ident) parse() {
 
 	if len(pg.File_contents) == 0 {
 
@@ -45,12 +43,12 @@ func (pg *pg_ident)parse() {
 		if len(t) == 3 {
 
 			entry := pg_ident_entry{
-				Mapname: t[0],
+				Mapname:        t[0],
 				SystemUsername: t[1],
-				PgUsername: t[2],
+				PgUsername:     t[2],
 			}
 
-			pg.Entries = append( pg.Entries, entry )
+			pg.Entries = append(pg.Entries, entry)
 
 		} else {
 
@@ -60,14 +58,3 @@ func (pg *pg_ident)parse() {
 
 	return
 }
-
-
-
-
-
-
-
-
-
-
-

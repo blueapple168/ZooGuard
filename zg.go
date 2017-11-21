@@ -4,7 +4,7 @@ import "github.com/dminGod/ZooGuard/config_parsers"
 
 func main() {
 
-//	postgresql_conf.ParseTestFile()
+	//	postgresql_conf.ParseTestFile()
 
 	config_prasers.TestGtm()
 
@@ -16,9 +16,9 @@ func main() {
 	//
 	//fmt.Println("collect called, now calling fs webserver")
 	//
-  	//fs := http.FileServer(http.Dir("static_content"))
-  	//http.Handle("/", fs)
+	//fs := http.FileServer(http.Dir("static_content"))
+	//http.Handle("/", fs)
 	//
-  	//fmt.Println("Serving on 3000")
-  	//http.ListenAndServe(":3000", nil)
+	//fmt.Println("Serving on 3000")
+	//http.ListenAndServe(":3000", nil)
 }

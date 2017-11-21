@@ -4,7 +4,8 @@ import (
 	"testing"
 )
 
-const (sample_gtm_conf = `
+const (
+	sample_gtm_conf = `
 #-----------------------------
 # GTM Proxy configuration file
 #-----------------------------
@@ -86,9 +87,10 @@ gtm_port = 8080
 worker_threads = 1
 gtm_connect_retry_interval = 1
 # End of addition
-`)
+`
+)
 
-func TestGTMParse(t *testing.T){
+func TestGTMParse(t *testing.T) {
 
 	var p gtm_config
 	p.File_contents = sample_gtm_conf
@@ -110,8 +112,3 @@ func TestGTMParse(t *testing.T){
 		t.Fail()
 	}
 }
-
-
-
-
-

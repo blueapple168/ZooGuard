@@ -1,11 +1,11 @@
 package config_prasers
 
 import (
-	"strings"
 	"strconv"
+	"strings"
 )
 
-func retString(str string) (retStr string){
+func retString(str string) (retStr string) {
 
 	// Take the string, first remove the space around it
 	// Remove any ( and ) brackets around it
@@ -44,7 +44,7 @@ func retBool(str string) (retBool bool) {
 	return
 }
 
-func cleanSpaces(str string) (string) {
+func cleanSpaces(str string) string {
 
 	strRet := strings.Replace(str, "(", "", -1)
 	strRet = strings.Replace(strRet, ")", "", -1)
@@ -53,7 +53,6 @@ func cleanSpaces(str string) (string) {
 
 	return strRet
 }
-
 
 func cleanSpacesArr(str string) (strArrRet []string) {
 
@@ -84,7 +83,6 @@ func cleanSpacesInt(str string) (retInt int) {
 	return
 }
 
-
 func countsMatch(kk ...[]string) (retBool bool) {
 
 	retBool = true
@@ -100,4 +98,3 @@ func countsMatch(kk ...[]string) (retBool bool) {
 
 	return
 }
-

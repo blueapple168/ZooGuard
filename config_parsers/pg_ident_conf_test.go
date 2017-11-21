@@ -4,7 +4,8 @@ import (
 	"testing"
 )
 
-const (sample_ident_conf = `# PostgreSQL User Name Maps
+const (
+	sample_ident_conf = `# PostgreSQL User Name Maps
 # =========================
 #
 # Refer to the PostgreSQL documentation, chapter "Client
@@ -48,16 +49,20 @@ const (sample_ident_conf = `# PostgreSQL User Name Maps
 # MAPNAME       SYSTEM-USERNAME         PG-USERNAME
 superadmin		admin_app			adminnn
 superadmin		admin_app2			adminnn2
-superadmin		admin_app`)
+superadmin		admin_app`
+)
 
-
-func TestIdentParse(t *testing.T){
+func TestIdentParse(t *testing.T) {
 
 	var p pg_ident
 	p.File_contents = sample_ident_conf
 	p.parse()
 
-	answers := []struct{ mapname string; sys_username string; pg_username string}{ { "superadmin", "admin_app", "adminnn"  }, { "superadmin", "admin_app2", "adminnn2"  }  }
+	answers := []struct {
+		mapname      string
+		sys_username string
+		pg_username  string
+	}{{"superadmin", "admin_app", "adminnn"}, {"superadmin", "admin_app2", "adminnn2"}}
 
 	var issue bool
 
@@ -90,8 +95,3 @@ func TestIdentParse(t *testing.T){
 		t.Fail()
 	}
 }
-
-
-
-
-

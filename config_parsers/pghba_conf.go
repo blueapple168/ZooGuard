@@ -5,24 +5,22 @@ import (
 	"strings"
 )
 
-type pg_hba_entry struct  {
-
-	Type 		string
-	Database	string
-	User		string
-	Address		string
-	Method		string
+type pg_hba_entry struct {
+	Type     string
+	Database string
+	User     string
+	Address  string
+	Method   string
 }
 
 type pg_hba struct {
-
 	Invalid_Entries []string
-	Entries []pg_hba_entry
-	Server_name string
-	File_contents string
+	Entries         []pg_hba_entry
+	Server_name     string
+	File_contents   string
 }
 
-func (pg *pg_hba)parse() {
+func (pg *pg_hba) parse() {
 
 	if len(pg.File_contents) == 0 {
 
@@ -48,14 +46,14 @@ func (pg *pg_hba)parse() {
 		if len(t) == 5 {
 
 			entry := pg_hba_entry{
-				Type: t[0],
+				Type:     t[0],
 				Database: t[1],
-				User: t[2],
-				Address: t[3],
-				Method: t[4],
+				User:     t[2],
+				Address:  t[3],
+				Method:   t[4],
 			}
 
-			pg.Entries = append( pg.Entries, entry )
+			pg.Entries = append(pg.Entries, entry)
 
 		} else {
 
@@ -65,14 +63,3 @@ func (pg *pg_hba)parse() {
 
 	return
 }
-
-
-
-
-
-
-
-
-
-
-

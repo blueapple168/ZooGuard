@@ -16,7 +16,6 @@ type pgctl_staging_config struct {
 	ConfigBackupHost string
 	ConfigBackupDir  string
 
-
 	// GTM Master
 	GtmName                      string
 	GtmMasterServer              string
@@ -25,7 +24,6 @@ type pgctl_staging_config struct {
 	GtmExtraConfig               string
 	GtmMasterSpecificExtraConfig string
 
-
 	// GTM Slave
 	GtmSlave                    bool
 	GtmSlaveName                string
@@ -33,8 +31,6 @@ type pgctl_staging_config struct {
 	GtmSlavePort                string
 	GtmSlaveDir                 string
 	GtmSlaveSpecificExtraConfig string
-
-
 
 	// GTM Proxy
 	GtmProxyDir string
@@ -46,8 +42,6 @@ type pgctl_staging_config struct {
 	GtmProxyDirs    []string
 
 	GtmPxyExtraConfig []string
-
-
 
 	// Coordinator Master
 	CoordMasterDir    string
@@ -66,8 +60,6 @@ type pgctl_staging_config struct {
 	CoordSpecificExtraConfig []string
 	CoordExtraConfig         []string
 
-
-
 	// Coordinator Slaves
 	CoordSlaveDir string
 
@@ -78,8 +70,6 @@ type pgctl_staging_config struct {
 	CoordSlaveDirs        []string
 	CoordSlavePorts       []string
 	CoordPgHbaEntries     []string
-
-
 
 	// Datanode Master
 	DatanodeMasterDir    string
@@ -101,8 +91,6 @@ type pgctl_staging_config struct {
 	DatanodeSpecificExtraPgHba  []string
 	DatanodeSpecificExtraConfig []string
 
-
-
 	// Datanode Slave Settings
 	DatanodeSlaveDir string
 
@@ -112,9 +100,6 @@ type pgctl_staging_config struct {
 	DatanodeSlaveDirs        []string
 	DatanodeSlavePoolerPorts []string
 }
-
-
-
 
 type pgxc_cluster struct {
 
@@ -153,11 +138,11 @@ type pgxc_cluster struct {
 
 	GtmMaster gtm_master
 
-	HasGtmSlave bool
-	GtmSlave    gtm_slave
+	HasGtmSlave       bool
+	GtmSlave          gtm_slave
 	GtmPxyExtraConfig string
 
-	HasGtmProxy      bool
+	HasGtmProxy bool
 	GTMProxies  []gtm_proxy
 
 	Coord []coordinator_master
@@ -170,7 +155,7 @@ type pgxc_cluster struct {
 	HasDatanodeSlaves bool
 	DatanodeSlaves    []datanode_slave
 
-	ServersList		[]string
+	ServersList []string
 }
 
 type gtm_master struct {
@@ -200,15 +185,13 @@ type gtm_slave struct {
 }
 
 type gtm_proxy struct {
-
-	GtmProxyName      string
-	GtmProxyServer    string
-	GtmProxyPort      string
-	GtmProxyDir       string
+	GtmProxyName   string
+	GtmProxyServer string
+	GtmProxyPort   string
+	GtmProxyDir    string
 }
 
 type coordinator_master struct {
-
 	CoordName         string
 	CoordMasterServer string
 	CoordPort         string
@@ -238,7 +221,6 @@ type coordinator_slave struct {
 }
 
 type datanode_master struct {
-
 	DatanodeName         string
 	DatanodeMasterServer string
 	DatanodePort         string
@@ -258,7 +240,6 @@ type datanode_master struct {
 }
 
 type datanode_slave struct {
-
 	DatanodeSlave           bool
 	DatanodeSlaveServer     string
 	DatanodeSlaveDir        string

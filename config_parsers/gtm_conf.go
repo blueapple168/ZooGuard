@@ -1,28 +1,27 @@
 package config_prasers
 
 import (
+	"github.com/mitchellh/mapstructure"
 	"regexp"
 	"strings"
-	"github.com/mitchellh/mapstructure"
 )
 
 type gtm_config struct {
+	File_contents string
 
-	File_contents		string
-
-	Nodename			string
-	Listen_addresses	string
-	Port				string
-	Worker_threads		string
-	Gtm_host			string
-	Gtm_port			string
-	Gtm_connect_retry_interval	string
-	Keepalives_idle				string
-	Keepalives_interval			string
-	Keepalives_count			string
-	Log_file					string
-	Log_min_messages			string
-	Kv_pairs					map[string]string
+	Nodename                   string
+	Listen_addresses           string
+	Port                       string
+	Worker_threads             string
+	Gtm_host                   string
+	Gtm_port                   string
+	Gtm_connect_retry_interval string
+	Keepalives_idle            string
+	Keepalives_interval        string
+	Keepalives_count           string
+	Log_file                   string
+	Log_min_messages           string
+	Kv_pairs                   map[string]string
 }
 
 func (gc *gtm_config) parse() {
@@ -66,18 +65,3 @@ func (gc *gtm_config) parse() {
 	gc.Kv_pairs = retMap
 	mapstructure.Decode(retMap, &gc)
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

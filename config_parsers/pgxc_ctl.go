@@ -1,31 +1,27 @@
 package config_prasers
 
 import (
-	"os"
 	"bufio"
+	"errors"
 	"fmt"
+	"github.com/dminGod/ZooGuard/log_collectors"
+	"os"
 	"regexp"
 	"strings"
-	"errors"
-	"github.com/dminGod/ZooGuard/log_collectors"
 )
 
 type Pgctl_parser struct {
-
 	FileLocation string
-	RawConfig map[string]string
-	St pgctl_staging_config
-	Cluster pgxc_cluster
+	RawConfig    map[string]string
+	St           pgctl_staging_config
+	Cluster      pgxc_cluster
 	PopulateErrs []error
-
 }
 
 func (p *Pgctl_parser) Init() {
 
 	p.RawConfig = make(map[string]string)
 }
-
-
 
 func (p *Pgctl_parser) Prase() {
 
@@ -40,9 +36,9 @@ func (p *Pgctl_parser) Prase() {
 	// 	running a command on the local server
 
 	// 	1) Get stuff for you
-			// 1) Read from a file
-			// 2) SSH into a remote server and return the file
-			// 3) Get it directly passed as text so the
+	// 1) Read from a file
+	// 2) SSH into a remote server and return the file
+	// 3) Get it directly passed as text so the
 
 	// 	2) Send commands over the network for you
 
@@ -56,10 +52,9 @@ func (p *Pgctl_parser) Prase() {
 
 	scanner := bufio.NewScanner(file)
 
-
 	// Fist take all the lines and put them in the RawConfig, so the override happens of the configuration
 	// Where its put in multiple times and we have the last most recent value
-	for scanner.Scan() {             // internally, it advances token based on sperator
+	for scanner.Scan() { // internally, it advances token based on sperator
 
 		p.interpret_line(scanner.Text())
 	}
@@ -82,14 +77,14 @@ func (p *Pgctl_parser) Parse_string(str string) {
 }
 
 // Individual Line parsing, remove the comments, keep the key-value pairs
-func (p *Pgctl_parser) interpret_line(curLine string){
+func (p *Pgctl_parser) interpret_line(curLine string) {
 
 	matBool, _ := regexp.Match("^( +|\t+)?[#-]", []byte(curLine))
 	hasEqualTo := strings.Contains(curLine, "=")
 
 	charsLen := len(strings.Replace(strings.Replace(curLine, " ", "", -1), "\t", "", -1))
 
-	if matBool == false && charsLen > 0 && hasEqualTo{
+	if matBool == false && charsLen > 0 && hasEqualTo {
 
 		remHash := strings.Split(curLine, "#")
 
@@ -109,7 +104,7 @@ func (p *Pgctl_parser) Populate() {
 	// Once the mapping on that level is done then we will start putting things in objects.
 	// Here we will also do the bulk of validation and give errors related to the cluster
 
-	for k, v := range p.RawConfig{
+	for k, v := range p.RawConfig {
 
 		switch k {
 		case "pgxcOwner":
@@ -349,7 +344,7 @@ func (p *Pgctl_parser) MapToObj() {
 	coordsOkay := countsMatch(p.St.CoordMasterServers, p.St.CoordMasterDirs, p.St.PoolerPorts, p.St.CoordPorts)
 	coordSlOkay := true
 
-//	dnOkay := countsMatch(p.St.DatanodeMasterServers, p.St.DatanodeMasterDirs, p.St.DatanodeMasterWALDirs)
+	//	dnOkay := countsMatch(p.St.DatanodeMasterServers, p.St.DatanodeMasterDirs, p.St.DatanodeMasterWALDirs)
 	dnOkay := countsMatch(p.St.DatanodeMasterServers, p.St.DatanodeMasterDirs)
 	dnSlOkay := true
 
@@ -370,7 +365,6 @@ func (p *Pgctl_parser) MapToObj() {
 		fmt.Println("Coord Sl", coordSlOkay)
 		fmt.Println("DN", dnOkay)
 		fmt.Println("DN Sl Coords", dnSlOkay)
-
 
 		return
 	}
@@ -429,9 +423,9 @@ func (p *Pgctl_parser) MapToObj() {
 
 			gp[v] = gtm_proxy{
 				GtmProxyServer: v,
-				GtmProxyName: p.St.GtmProxyNames[i],
-				GtmProxyPort: p.St.GtmProxyPorts[i],
-				GtmProxyDir: p.St.GtmProxyDirs[i],
+				GtmProxyName:   p.St.GtmProxyNames[i],
+				GtmProxyPort:   p.St.GtmProxyPorts[i],
+				GtmProxyDir:    p.St.GtmProxyDirs[i],
 			}
 
 			// We'll add this as an array also, cause not every proxy and slave node may be mapped to something
@@ -478,7 +472,6 @@ func (p *Pgctl_parser) MapToObj() {
 		}
 	}
 
-
 	// Loop over Coords
 	for i, v := range p.St.CoordMasterServers {
 
@@ -494,19 +487,18 @@ func (p *Pgctl_parser) MapToObj() {
 		}
 
 		p.Cluster.Coord = append(p.Cluster.Coord, coordinator_master{
-			CoordName: p.St.CoordNames[i],
+			CoordName:         p.St.CoordNames[i],
 			CoordMasterServer: v,
-//			CoordArchLogDir: p.St.CoordArchLogDirs[i],
-			CoordMasterDir: p.St.CoordMasterDirs[i],
-			CoordPort: p.St.CoordPorts[i],
-			PoolerPort: p.St.PoolerPorts[i],
+			//			CoordArchLogDir: p.St.CoordArchLogDirs[i],
+			CoordMasterDir:    p.St.CoordMasterDirs[i],
+			CoordPort:         p.St.CoordPorts[i],
+			PoolerPort:        p.St.PoolerPorts[i],
 			CoordMaxWALSender: p.St.CoordMaxWALSenders[i],
-			CoordinatorSlave: tmp_crd_slv,
+			CoordinatorSlave:  tmp_crd_slv,
 		})
 
 		all_servers[v] = struct{}{}
 	}
-
 
 	// Loop over Datanodes
 	for i, v := range p.St.DatanodeMasterServers {
@@ -523,15 +515,15 @@ func (p *Pgctl_parser) MapToObj() {
 		}
 
 		p.Cluster.Datanodes = append(p.Cluster.Datanodes, datanode_master{
-			DatanodeName: p.St.DatanodeNames[i],
+			DatanodeName:         p.St.DatanodeNames[i],
 			DatanodeMasterServer: v,
-			DatanodeMasterDir: p.St.DatanodeMasterDirs[i],
-			DatanodePort: p.St.DatanodePorts[i],
-//			DatanodeArchLogDir: p.St.DatanodeArchLogDirs[i],
+			DatanodeMasterDir:    p.St.DatanodeMasterDirs[i],
+			DatanodePort:         p.St.DatanodePorts[i],
+			//			DatanodeArchLogDir: p.St.DatanodeArchLogDirs[i],
 			DatanodePoolerPort: p.St.DatanodePoolerPorts[i],
-//			DatanodeMasterWALDir: p.St.DatanodeMasterWALDirs[i],
-			HasSlave: p.St.DatanodeSlave,
-			DatanodeSlave : tmp_dn_slv,
+			//			DatanodeMasterWALDir: p.St.DatanodeMasterWALDirs[i],
+			HasSlave:      p.St.DatanodeSlave,
+			DatanodeSlave: tmp_dn_slv,
 		})
 
 		all_servers[v] = struct{}{}
@@ -543,7 +535,6 @@ func (p *Pgctl_parser) MapToObj() {
 			p.Cluster.ServersList = append(p.Cluster.ServersList, k)
 		}
 	}
-
 
 	fmt.Println(all_servers)
 

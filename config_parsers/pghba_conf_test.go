@@ -4,7 +4,8 @@ import (
 	"testing"
 )
 
-const ( pghba_sample = `
+const (
+	pghba_sample = `
 # PostgreSQL Client Authentication Configuration File
 # ===================================================
 #
@@ -102,15 +103,20 @@ host    all             all             ::1/128                 trust
 # Addition at initialization, 20171115_20:14:33
 host all serverusr 0.0.0.0/0 trust
 # End of addition
-`)
+`
+)
 
-func TestPghba(t *testing.T){
+func TestPghba(t *testing.T) {
 
 	var p pg_ident
 	p.File_contents = sample_ident_conf
 	p.parse()
 
-	answers := []struct{ mapname string; sys_username string; pg_username string}{ { "superadmin", "admin_app", "adminnn"  }, { "superadmin", "admin_app2", "adminnn2"  }  }
+	answers := []struct {
+		mapname      string
+		sys_username string
+		pg_username  string
+	}{{"superadmin", "admin_app", "adminnn"}, {"superadmin", "admin_app2", "adminnn2"}}
 
 	var issue bool
 
@@ -143,7 +149,3 @@ func TestPghba(t *testing.T){
 		t.Fail()
 	}
 }
-
-
-
-

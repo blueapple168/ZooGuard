@@ -2,14 +2,13 @@ package config_prasers
 
 import (
 	"errors"
+	"github.com/mitchellh/mapstructure"
 	"regexp"
 	"strings"
-	"github.com/mitchellh/mapstructure"
 )
 
 type pg_conf struct {
-
-	File_contents						string
+	File_contents string
 
 	Data_directory                      string
 	Hba_file                            string
@@ -247,15 +246,13 @@ type pg_conf struct {
 	Pooler_port                         string
 	Gtm_host                            string
 	Gtm_port                            string
-	Kv_pairs							map[string]string
+	Kv_pairs                            map[string]string
 }
 
-
-func (pc *pg_conf) set_contents(file_contents string){
+func (pc *pg_conf) set_contents(file_contents string) {
 
 	pc.File_contents = file_contents
 }
-
 
 func (pc *pg_conf) parse() (errs error) {
 

@@ -1,10 +1,9 @@
 package config_prasers
 
 import (
-	"os"
-	"log"
 	"bufio"
-
+	"log"
+	"os"
 )
 
 func ParseTestFile() {
@@ -31,7 +30,3 @@ func ParseTestFile() {
 	p.parse()
 
 }
-
-
-
-
