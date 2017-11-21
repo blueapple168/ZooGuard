@@ -13,6 +13,7 @@ var Conf zg_config.ZgConfig
 
 var CassConnections CassConns
 var PostConnections PostConns
+var AppConnections AppConns
 
 func init() {
 
@@ -54,4 +55,10 @@ func init() {
 			connectCassandra(v)
 		}
 	}
+
+	for _, v := range Conf.Apps {
+
+		connectApps(v)
+	}
+
 }

@@ -2,7 +2,7 @@ package spoc
 
 import (
 	"database/sql"
-	//"errors"
+	"errors"
 	"fmt"
 	"math/rand"
 	"strings"
@@ -31,10 +31,10 @@ type PostConns struct {
 	Connections []PostDB
 }
 
-/*func (p *PostConns) GetByServerAndRole(server string, role string) (con PostDB, err error) {
+func (p *PostConns) GetByServerAndRole(server string, role string) (con PostDB, err error) {
 
 	for _, v := range p.Connections {
-		if server == v.Host && role == v.ComponentRole {
+		if server == v.Host && role == v.LinkedComponent {
 			con.Name = v.Name
 			con.Host = v.Host
 			con.Port = v.Port
@@ -47,14 +47,13 @@ type PostConns struct {
 		}
 	}
 
-	if con == nil {
+	if con.Name == "" {
 		err = errors.New("Could not find server")
 	}
 
 	return
 
 }
-*/
 
 func connectPostgres(v zg_config.Database) {
 
@@ -62,6 +61,11 @@ func connectPostgres(v zg_config.Database) {
 	postdb.Name = v.DatabaseName
 	postdb.User = v.Username
 	postdb.Pass = v.Password
+	postdb.ParentAppName = v.Parent_App_Name
+	postdb.LinkedComponent = v.Linked_Component
+	postdb.ParentType = v.Parent_Type
+	postdb.ComponentRole = v.Component_Role
+	postdb.Identity = v.Db_Identity
 
 	rand.Seed(time.Now().UTC().UnixNano())
 

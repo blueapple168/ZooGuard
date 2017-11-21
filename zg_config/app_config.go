@@ -46,17 +46,20 @@ type Server struct {
 }
 
 type App struct {
-	App_type       string
-	App_unique_key string
+	Application_type       string
+	Application_unique_key string
+	Server                 string
+
+	Hector_Grpc_port string
+	Http_port        string
+	Native_port      string
+
+	Config_file string
 
 	Config_folder string
-	Config_file   string
 
 	Component_name   string
 	Installed_server string
-	App_port         string
-	Grpc_port        string
-	Http_port        string
 
 	Cluster_servers []string
 	Seed_servers    []string

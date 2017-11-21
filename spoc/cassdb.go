@@ -68,7 +68,7 @@ func connectCassandra(v zg_config.Database) {
 
 }
 
-func (c_db *CassDB) Select(s string) {
+func (c_db *CassDB) Query(s string) (retVal []map[string]interface{}) {
 
 	iter := c_db.Session.Query(s).Consistency(gocql.LocalOne).Iter()
 	result, err := iter.SliceMap()
@@ -77,7 +77,9 @@ func (c_db *CassDB) Select(s string) {
 		fmt.Println("Error fetching the details", err)
 		return
 	} else {
+		retVal = result
 		fmt.Println(result)
+		return
 	}
 
 }
