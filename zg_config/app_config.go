@@ -6,9 +6,11 @@ import (
 	"fmt"
 	"github.com/spf13/viper"
 	"os"
-	"runtime"
 	"strings"
+	"runtime"
 )
+
+
 
 type http struct {
 	HttpEnabled bool
@@ -45,17 +47,21 @@ type Server struct {
 }
 
 type App struct {
-	App_type       string
-	App_unique_key string
+
+	Application_type       string
+	Application_unique_key string
+	Server                 string
+
+	Hector_Grpc_port string
+	Http_port        string
+	Native_port      string
+
+	Config_file string
 
 	Config_folder string
-	Config_file   string
 
 	Component_name   string
 	Installed_server string
-	App_port         string
-	Grpc_port        string
-	Http_port        string
 
 	Cluster_servers []string
 	Seed_servers    []string
@@ -64,11 +70,23 @@ type App struct {
 }
 
 type Database struct {
-	Username     string
-	Password     string
-	DatabaseName string
-	DatabaseType string
-	Host         []string
+
+	Username                        string
+	Password                        string
+	DatabaseName                    string
+	DatabaseType                    string
+	Host                            []string
+	Parent_App_Name                 string
+	Linked_Component                string
+	Parent_Type                     string
+	Component_Role                  string
+	Db_Identity                     string
+	Cassandra_NumConnectionsPerHost int
+	Cassandra_ConnectionTimeout     int
+	Cassandra_SocketKeepAlive       int
+	Cassandra_NumberOfQueryRetries  int
+	Cassandra_ReadConsistency       int
+	Cassandra_WriteConsistency      int
 }
 
 type ZgConfig struct {
@@ -162,20 +180,6 @@ func GetConfig() ZgConfig {
 
 				fmt.Println(e.Error())
 			}
-
-			os.Exit(1)
-		}
-
-		ViConfig = viper.New()
-
-		ViConfig.SetConfigFile(configFile)
-		ViConfig.AutomaticEnv()
-
-		verr := ViConfig.ReadInConfig()
-
-		e2 := ViConfig.Unmarshal(&Config)
-
-		if e2 != nil {
 
 			fmt.Print("Error marshaling config ", e2)
 		}
