@@ -1,9 +1,10 @@
-package config_prasers
+package config_parsers
 
 import (
-	"github.com/mitchellh/mapstructure"
 	"regexp"
 	"strings"
+
+	"github.com/mitchellh/mapstructure"
 )
 
 type gtm_config struct {

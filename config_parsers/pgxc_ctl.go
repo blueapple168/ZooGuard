@@ -1,13 +1,15 @@
-package config_prasers
+package config_parsers
 
 import (
 	"bufio"
 	"errors"
 	"fmt"
-	"github.com/dminGod/ZooGuard/log_collectors"
+	//"github.com/dminGod/ZooGuard/log_collectors"
 	"os"
 	"regexp"
 	"strings"
+
+	"github.com/dminGod/ZooGuard/spoc"
 )
 
 type Pgctl_parser struct {
@@ -63,9 +65,9 @@ func (p *Pgctl_parser) Prase() {
 	p.Populate()
 }
 
-func (p *Pgctl_parser) Parse_string(str string) {
+func (p *Pgctl_parser) ParseString(str string) {
 
-	str = log_collectors.GetPgxcConfig()
+	//str = log_collectors.GetPgxcConfig()
 
 	for _, v := range strings.Split(str, "\n") {
 
@@ -82,11 +84,20 @@ func (p *Pgctl_parser) interpret_line(curLine string) {
 	matBool, _ := regexp.Match("^( +|\t+)?[#-]", []byte(curLine))
 	hasEqualTo := strings.Contains(curLine, "=")
 
+	re := regexp.MustCompile(`\[\d+\]=`)
+	re2 := regexp.MustCompile(`^> `)
+	re3 := regexp.MustCompile(`"`)
+
 	charsLen := len(strings.Replace(strings.Replace(curLine, " ", "", -1), "\t", "", -1))
 
 	if matBool == false && charsLen > 0 && hasEqualTo {
 
 		remHash := strings.Split(curLine, "#")
+		remHash[0] = re.ReplaceAllString(remHash[0], "")
+		remHash[0] = re2.ReplaceAllString(remHash[0], "")
+		remHash[0] = re3.ReplaceAllString(remHash[0], "")
+
+		fmt.Println("Parsing : ", remHash[0])
 
 		kvPair := strings.Split(remHash[0], "=")
 
@@ -380,12 +391,19 @@ func (p *Pgctl_parser) MapToObj() {
 			GtmSlaveSpecificExtraConfig: p.St.GtmSlaveSpecificExtraConfig,
 		}
 
+		p.Cluster.GtmSlave.ServerConn = getConnection(p.Cluster.GtmSlave.GtmSlaveServer)
+		updateRoles(p.Cluster.GtmSlave.GtmSlaveServer, "gtm_slave")
 		all_servers[p.St.GtmSlaveServer] = struct{}{}
 	}
 
+	// get connection pointer to this server from spoc -- if there then add it
+	// to each of the components
+
+	// update the role of the server to add tags
+	// spoc.Connectsion.UpdateRoleByIP(GtmMasterServer, 'gtm_master')
+
 	// Add the GTM Master
 	p.Cluster.GtmMaster = gtm_master{
-
 		GtmName:                      p.St.GtmName,
 		GtmMasterServer:              p.St.GtmMasterServer,
 		GtmExtraConfig:               p.St.GtmExtraConfig,
@@ -395,6 +413,8 @@ func (p *Pgctl_parser) MapToObj() {
 		GtmSlave:                     p.Cluster.GtmSlave,
 		HasSlave:                     p.St.GtmSlave,
 	}
+	updateRoles(p.Cluster.GtmMaster.GtmMasterServer, "gtm_master")
+	p.Cluster.GtmMaster.ServerConn = getConnection(p.Cluster.GtmMaster.GtmMasterServer)
 
 	all_servers[p.St.GtmMasterServer] = struct{}{}
 
@@ -448,7 +468,7 @@ func (p *Pgctl_parser) MapToObj() {
 				CoordSlaveDir:        p.St.CoordSlaveDirs[i],
 				CoordSlaveSync:       p.St.CoordSlaveSync,
 			}
-
+			//cs[v].ServerConn = getConnection(cs[v].CoordSlaveServer)
 			p.Cluster.CoordSlaves = append(p.Cluster.CoordSlaves, cs[i])
 			all_servers[v] = struct{}{}
 		}
@@ -465,7 +485,7 @@ func (p *Pgctl_parser) MapToObj() {
 				DatanodeSlaveDir:        p.St.DatanodeSlaveDirs[i],
 				DatanodeSlavePoolerPort: p.St.DatanodeSlavePoolerPorts[i],
 			}
-
+			//ds[v].ServerConn = getConnection(ds[v].DatanodeSlaveServer)
 			p.Cluster.DatanodeSlaves = append(p.Cluster.DatanodeSlaves, ds[i])
 
 			all_servers[v] = struct{}{}
@@ -495,6 +515,7 @@ func (p *Pgctl_parser) MapToObj() {
 			PoolerPort:        p.St.PoolerPorts[i],
 			CoordMaxWALSender: p.St.CoordMaxWALSenders[i],
 			CoordinatorSlave:  tmp_crd_slv,
+			ServerConn:        getConnection(v),
 		})
 
 		all_servers[v] = struct{}{}
@@ -514,6 +535,8 @@ func (p *Pgctl_parser) MapToObj() {
 			}
 		}
 
+		fmt.Printf("trying to get connection for %v ... %+v \n", v, p.St.DatanodeNames[i])
+
 		p.Cluster.Datanodes = append(p.Cluster.Datanodes, datanode_master{
 			DatanodeName:         p.St.DatanodeNames[i],
 			DatanodeMasterServer: v,
@@ -524,6 +547,7 @@ func (p *Pgctl_parser) MapToObj() {
 			//			DatanodeMasterWALDir: p.St.DatanodeMasterWALDirs[i],
 			HasSlave:      p.St.DatanodeSlave,
 			DatanodeSlave: tmp_dn_slv,
+			ServerConn:    getConnection(v),
 		})
 
 		all_servers[v] = struct{}{}
@@ -538,4 +562,15 @@ func (p *Pgctl_parser) MapToObj() {
 
 	fmt.Println(all_servers)
 
+}
+
+func getConnection(s string) (c *spoc.ConnInfo) {
+	c = spoc.ClientConnections.GetServerByIp(s)
+	return
+
+}
+
+func updateRoles(ip string, role string) {
+	b := spoc.ClientConnections.UpdateRole(ip, role)
+	fmt.Println(b)
 }

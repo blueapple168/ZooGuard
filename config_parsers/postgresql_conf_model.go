@@ -1,13 +1,14 @@
-package config_prasers
+package config_parsers
 
 import (
 	"errors"
-	"github.com/mitchellh/mapstructure"
 	"regexp"
 	"strings"
+
+	"github.com/mitchellh/mapstructure"
 )
 
-type pg_conf struct {
+type Pg_conf struct {
 	File_contents string
 
 	Data_directory                      string
@@ -249,12 +250,12 @@ type pg_conf struct {
 	Kv_pairs                            map[string]string
 }
 
-func (pc *pg_conf) set_contents(file_contents string) {
+func (pc *Pg_conf) Set_contents(file_contents string) {
 
 	pc.File_contents = file_contents
 }
 
-func (pc *pg_conf) parse() (errs error) {
+func (pc *Pg_conf) Parse() (errs error) {
 
 	if len(pc.File_contents) == 0 {
 		return errors.New("No contents set for config")

@@ -1,4 +1,4 @@
-package config_prasers
+package config_parsers
 
 import (
 	"strconv"

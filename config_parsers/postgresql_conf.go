@@ -1,4 +1,4 @@
-package config_prasers
+package config_parsers
 
 import (
 	"bufio"
@@ -15,7 +15,7 @@ func ParseTestFile() {
 
 	scanner := bufio.NewScanner(ff)
 
-	var p pg_conf
+	var p Pg_conf
 
 	buf := make([]byte, 0, 64*1024)
 	scanner.Buffer(buf, 1024*1024)
@@ -26,7 +26,7 @@ func ParseTestFile() {
 		s += scanner.Text() + "\n"
 	}
 
-	p.set_contents(s)
-	p.parse()
+	p.Set_contents(s)
+	p.Parse()
 
 }

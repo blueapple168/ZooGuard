@@ -1,4 +1,8 @@
-package config_prasers
+package config_parsers
+
+import (
+	"github.com/dminGod/ZooGuard/spoc"
+)
 
 type pgctl_staging_config struct {
 
@@ -168,8 +172,9 @@ type gtm_master struct {
 	GtmExtraConfig               string
 	GtmMasterSpecificExtraConfig string
 
-	HasSlave bool
-	GtmSlave gtm_slave
+	HasSlave   bool
+	GtmSlave   gtm_slave
+	ServerConn *spoc.ConnInfo
 }
 
 type gtm_slave struct {
@@ -182,6 +187,7 @@ type gtm_slave struct {
 	GtmSlavePort                string
 	GtmSlaveDir                 string
 	GtmSlaveSpecificExtraConfig string
+	ServerConn                  *spoc.ConnInfo
 }
 
 type gtm_proxy struct {
@@ -189,6 +195,13 @@ type gtm_proxy struct {
 	GtmProxyServer string
 	GtmProxyPort   string
 	GtmProxyDir    string
+
+	ConnectedCoords          []*coordinator_master
+	ConnectedCoordSlaves     []*coordinator_slave
+	ConnectedDatanodeMasters []*datanode_master
+	ConnectedDatanodeSlaves  []*datanode_slave
+
+	ServerConn *spoc.ConnInfo
 }
 
 type coordinator_master struct {
@@ -204,9 +217,16 @@ type coordinator_master struct {
 	CoordSpecificExtraPgHba  string
 	CoordSpecificExtraConfig string
 	CoordExtraConfig         string
+	ServerConfiguration      Pg_conf
 
+	ConfiguredGtmIp   string
+	ConfiguredGtmPort string
+	ViaGTMProxy       bool
+
+	Gtm_proxy        *gtm_proxy
 	HasSlave         bool
-	CoordinatorSlave coordinator_slave
+	CoordinatorSlave *coordinator_slave
+	ServerConn       *spoc.ConnInfo
 }
 
 type coordinator_slave struct {
@@ -218,6 +238,12 @@ type coordinator_slave struct {
 	CoordSlaveDir        string
 	CoordSlavePort       string
 	CoordPgHbaEntrie     string
+
+	ConfiguredGtmIp     string
+	ConfiguredGtmPort   string
+	Gtm_proxy           *gtm_proxy
+	ServerConfiguration Pg_conf
+	ServerConn          *spoc.ConnInfo
 }
 
 type datanode_master struct {
@@ -236,7 +262,15 @@ type datanode_master struct {
 	DatanodeSpecificExtraConfig string
 
 	HasSlave      bool
-	DatanodeSlave datanode_slave
+	DatanodeSlave *datanode_slave
+
+	ConfiguredGtmIp   string
+	ConfiguredGtmPort string
+
+	Gtm_proxy           *gtm_proxy
+	ServerConfiguration Pg_conf
+	ServerConn          *spoc.ConnInfo
+	Abc                 string
 }
 
 type datanode_slave struct {
@@ -245,4 +279,10 @@ type datanode_slave struct {
 	DatanodeSlaveDir        string
 	DatanodeSlavePort       string
 	DatanodeSlavePoolerPort string
+
+	ConfiguredGtmIp     string
+	ConfiguredGtmPort   string
+	Gtm_proxy           *gtm_proxy
+	ServerConfiguration Pg_conf
+	ServerConn          *spoc.ConnInfo
 }

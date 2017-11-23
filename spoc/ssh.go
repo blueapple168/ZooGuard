@@ -1,18 +1,16 @@
 package spoc
 
-import (
-	"bytes"
-	"fmt"
-)
+//"bytes"
+//"fmt"
 
-func RunSSHCommand(server string, cmd string) (retStr string) {
+/*func RunSSHCommand(server string, cmd string) (retStr string) {
 
 	var stdoutBuf bytes.Buffer
 
-	if _, ok := clients[server]; ok {
+	if _, ok := Clients[server]; ok {
 
 		fmt.Println("Getting session info and ssh")
-		session, err := (clients[server]).NewSession()
+		session, err := (Clients[server]).NewSession()
 
 		if err != nil {
 			fmt.Println("Error in running command", err)
@@ -28,4 +26,4 @@ func RunSSHCommand(server string, cmd string) (retStr string) {
 	}
 
 	return
-}
+}*/
