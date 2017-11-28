@@ -11,14 +11,19 @@ type pg_ident_entry struct {
 	PgUsername     string
 }
 
-type pg_ident struct {
+type Pg_ident struct {
 	Invalid_Entries []string
 	Entries         []pg_ident_entry
 	Server_name     string
 	File_contents   string
 }
 
-func (pg *pg_ident) parse() {
+func (pg *Pg_ident) Set_contents(file_contents string) {
+
+	pg.File_contents = file_contents
+}
+
+func (pg *Pg_ident) Parse() {
 
 	if len(pg.File_contents) == 0 {
 

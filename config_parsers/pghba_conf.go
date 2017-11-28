@@ -13,14 +13,19 @@ type pg_hba_entry struct {
 	Method   string
 }
 
-type pg_hba struct {
+type Pg_hba struct {
 	Invalid_Entries []string
 	Entries         []pg_hba_entry
 	Server_name     string
 	File_contents   string
 }
 
-func (pg *pg_hba) parse() {
+func (pg *Pg_hba) Set_contents(file_contents string) {
+
+	pg.File_contents = file_contents
+}
+
+func (pg *Pg_hba) Parse() {
 
 	if len(pg.File_contents) == 0 {
 

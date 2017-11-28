@@ -28,7 +28,7 @@ type PostDB struct {
 }
 
 type PostConns struct {
-	Connections []PostDB
+	Connections []*PostDB
 }
 
 func (p *PostConns) GetByServerAndRole(server string, role string) (con PostDB, err error) {
@@ -111,7 +111,7 @@ func connectPostgres(v zg_config.Database) {
 
 			//logger.Info( "Adding connection to pool, Server : ", Host, " Port", dbPort)
 			//dbpool = append(dbpool, dbpoolConn)
-			PostConnections.Connections = append(PostConnections.Connections, postdb)
+			PostConnections.Connections = append(PostConnections.Connections, &postdb)
 			fmt.Println("Added db connection to dbpool")
 		}
 	}

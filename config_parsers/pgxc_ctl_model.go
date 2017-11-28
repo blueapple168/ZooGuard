@@ -172,9 +172,10 @@ type gtm_master struct {
 	GtmExtraConfig               string
 	GtmMasterSpecificExtraConfig string
 
-	HasSlave   bool
-	GtmSlave   gtm_slave
-	ServerConn *spoc.ConnInfo
+	HasSlave            bool
+	GtmSlave            gtm_slave
+	ServerConn          *spoc.ConnInfo
+	ServerConfiguration Pg_conf
 }
 
 type gtm_slave struct {
@@ -188,6 +189,7 @@ type gtm_slave struct {
 	GtmSlaveDir                 string
 	GtmSlaveSpecificExtraConfig string
 	ServerConn                  *spoc.ConnInfo
+	ServerConfiguration         Pg_conf
 }
 
 type gtm_proxy struct {
@@ -200,8 +202,8 @@ type gtm_proxy struct {
 	ConnectedCoordSlaves     []*coordinator_slave
 	ConnectedDatanodeMasters []*datanode_master
 	ConnectedDatanodeSlaves  []*datanode_slave
-
-	ServerConn *spoc.ConnInfo
+	ServerConfiguration      Pg_conf
+	ServerConn               *spoc.ConnInfo
 }
 
 type coordinator_master struct {
@@ -218,6 +220,8 @@ type coordinator_master struct {
 	CoordSpecificExtraConfig string
 	CoordExtraConfig         string
 	ServerConfiguration      Pg_conf
+	IdentConfiguration       Pg_ident
+	HbaConfiguration         Pg_hba
 
 	ConfiguredGtmIp   string
 	ConfiguredGtmPort string
@@ -243,6 +247,8 @@ type coordinator_slave struct {
 	ConfiguredGtmPort   string
 	Gtm_proxy           *gtm_proxy
 	ServerConfiguration Pg_conf
+	IdentConfiguration  Pg_ident
+	HbaConfiguration    Pg_hba
 	ServerConn          *spoc.ConnInfo
 }
 
@@ -269,20 +275,181 @@ type datanode_master struct {
 
 	Gtm_proxy           *gtm_proxy
 	ServerConfiguration Pg_conf
+	IdentConfiguration  Pg_ident
+	HbaConfiguration    Pg_hba
 	ServerConn          *spoc.ConnInfo
 	Abc                 string
 }
 
 type datanode_slave struct {
-	DatanodeSlave           bool
-	DatanodeSlaveServer     string
-	DatanodeSlaveDir        string
-	DatanodeSlavePort       string
-	DatanodeSlavePoolerPort string
+	DatanodeSlave bool
+	PgDetails     PgConf
 
+	DatanodeSlaveServer string
+	DatanodeSlaveDir    string
+	DatanodeSlavePort   string
+	ServerConn          *spoc.ConnInfo
 	ConfiguredGtmIp     string
 	ConfiguredGtmPort   string
 	Gtm_proxy           *gtm_proxy
 	ServerConfiguration Pg_conf
-	ServerConn          *spoc.ConnInfo
+	IdentConfiguration  Pg_ident
+	HbaConfiguration    Pg_hba
+
+	DatanodeSlavePoolerPort string
+}
+
+type PgConf struct {
+	ServerIp            string
+	PgDir               string
+	PgPort              string
+	Conn                *spoc.ConnInfo
+	GtmIp               string
+	GtmPort             string
+	Gtm_proxy           *gtm_proxy
+	ServerConfiguration Pg_conf
+	IdentConfiguration  Pg_ident
+	Role                string
+}
+
+type PgNode interface {
+	GetPgConfig() PgConf
+	SetPgConfig(Pg_conf) bool
+	SetIdentConfig(Pg_ident) bool
+	SetHbaConfig(Pg_hba) bool
+}
+
+func (d *datanode_slave) GetPgConfig() (k PgConf) {
+
+	k = PgConf{
+		ServerIp:  d.DatanodeSlaveServer,
+		PgDir:     d.DatanodeSlaveDir,
+		PgPort:    d.DatanodeSlavePort,
+		Conn:      d.ServerConn,
+		GtmIp:     d.ConfiguredGtmIp,
+		GtmPort:   d.ConfiguredGtmPort,
+		Gtm_proxy: d.Gtm_proxy,
+		Role:      "Datanode_Slave",
+	}
+
+	return
+
+}
+
+func (d *datanode_master) GetPgConfig() (k PgConf) {
+
+	k = PgConf{
+		ServerIp:  d.DatanodeMasterServer,
+		PgDir:     d.DatanodeMasterDir,
+		PgPort:    d.DatanodePort,
+		Conn:      d.ServerConn,
+		GtmIp:     d.ConfiguredGtmIp,
+		GtmPort:   d.ConfiguredGtmPort,
+		Gtm_proxy: d.Gtm_proxy,
+		Role:      "Datanode_Master",
+	}
+	return
+}
+
+func (c *coordinator_master) GetPgConfig() (k PgConf) {
+
+	k = PgConf{
+		ServerIp:  c.CoordMasterServer,
+		PgDir:     c.CoordMasterDir,
+		PgPort:    c.CoordPort,
+		Conn:      c.ServerConn,
+		GtmIp:     c.ConfiguredGtmIp,
+		GtmPort:   c.ConfiguredGtmPort,
+		Gtm_proxy: c.Gtm_proxy,
+		Role:      "Coordinator_Master",
+	}
+	return
+}
+
+func (c *coordinator_slave) GetPgConfig() (k PgConf) {
+
+	k = PgConf{
+		ServerIp:  c.CoordSlaveServer,
+		PgDir:     c.CoordSlaveDir,
+		PgPort:    c.CoordSlavePort,
+		Conn:      c.ServerConn,
+		GtmIp:     c.ConfiguredGtmIp,
+		GtmPort:   c.ConfiguredGtmPort,
+		Gtm_proxy: c.Gtm_proxy,
+		Role:      "Coordinator_Slave",
+	}
+	return
+}
+
+func (d *datanode_slave) SetPgConfig(p Pg_conf) (retVal bool) {
+
+	d.ServerConfiguration = p
+	return
+}
+
+func (d *datanode_master) SetPgConfig(p Pg_conf) (retVal bool) {
+
+	d.ServerConfiguration = p
+	retVal = false
+	return
+}
+
+func (c *coordinator_slave) SetPgConfig(p Pg_conf) (retVal bool) {
+
+	c.ServerConfiguration = p
+	return
+}
+
+func (c *coordinator_master) SetPgConfig(p Pg_conf) (retVal bool) {
+
+	c.ServerConfiguration = p
+	return
+}
+
+func (d *datanode_master) SetIdentConfig(pi Pg_ident) (retVal bool) {
+
+	d.IdentConfiguration = pi
+	return
+}
+
+func (d *datanode_slave) SetIdentConfig(pi Pg_ident) (retVal bool) {
+
+	d.IdentConfiguration = pi
+	return
+}
+
+func (c *coordinator_master) SetIdentConfig(pi Pg_ident) (retVal bool) {
+
+	c.IdentConfiguration = pi
+	return
+}
+
+func (c *coordinator_slave) SetIdentConfig(pi Pg_ident) (retVal bool) {
+
+	c.IdentConfiguration = pi
+	return
+}
+
+func (d *datanode_master) SetHbaConfig(ph Pg_hba) (retVal bool) {
+
+	d.HbaConfiguration = ph
+	return
+}
+
+func (d *datanode_slave) SetHbaConfig(ph Pg_hba) (retVal bool) {
+
+	d.HbaConfiguration = ph
+	return
+}
+
+func (c *coordinator_master) SetHbaConfig(ph Pg_hba) (retVal bool) {
+
+	c.HbaConfiguration = ph
+	return
+}
+
+func (c *coordinator_slave) SetHbaConfig(ph Pg_hba) (retVal bool) {
+
+	c.HbaConfiguration = ph
+	return
 }

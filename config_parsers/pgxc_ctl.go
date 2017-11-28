@@ -446,6 +446,7 @@ func (p *Pgctl_parser) MapToObj() {
 				GtmProxyName:   p.St.GtmProxyNames[i],
 				GtmProxyPort:   p.St.GtmProxyPorts[i],
 				GtmProxyDir:    p.St.GtmProxyDirs[i],
+				ServerConn:     getConnection(v),
 			}
 
 			// We'll add this as an array also, cause not every proxy and slave node may be mapped to something
@@ -467,6 +468,7 @@ func (p *Pgctl_parser) MapToObj() {
 				CoordPgHbaEntrie:     p.St.CoordPgHbaEntries[i],
 				CoordSlaveDir:        p.St.CoordSlaveDirs[i],
 				CoordSlaveSync:       p.St.CoordSlaveSync,
+				ServerConn:           getConnection(v),
 			}
 			//cs[v].ServerConn = getConnection(cs[v].CoordSlaveServer)
 			p.Cluster.CoordSlaves = append(p.Cluster.CoordSlaves, cs[i])
@@ -484,6 +486,7 @@ func (p *Pgctl_parser) MapToObj() {
 				DatanodeSlavePort:       p.St.DatanodeSlavePorts[i],
 				DatanodeSlaveDir:        p.St.DatanodeSlaveDirs[i],
 				DatanodeSlavePoolerPort: p.St.DatanodeSlavePoolerPorts[i],
+				ServerConn:              getConnection(v),
 			}
 			//ds[v].ServerConn = getConnection(ds[v].DatanodeSlaveServer)
 			p.Cluster.DatanodeSlaves = append(p.Cluster.DatanodeSlaves, ds[i])
@@ -514,7 +517,7 @@ func (p *Pgctl_parser) MapToObj() {
 			CoordPort:         p.St.CoordPorts[i],
 			PoolerPort:        p.St.PoolerPorts[i],
 			CoordMaxWALSender: p.St.CoordMaxWALSenders[i],
-			CoordinatorSlave:  tmp_crd_slv,
+			CoordinatorSlave:  &tmp_crd_slv,
 			ServerConn:        getConnection(v),
 		})
 
@@ -546,7 +549,7 @@ func (p *Pgctl_parser) MapToObj() {
 			DatanodePoolerPort: p.St.DatanodePoolerPorts[i],
 			//			DatanodeMasterWALDir: p.St.DatanodeMasterWALDirs[i],
 			HasSlave:      p.St.DatanodeSlave,
-			DatanodeSlave: tmp_dn_slv,
+			DatanodeSlave: &tmp_dn_slv,
 			ServerConn:    getConnection(v),
 		})
 

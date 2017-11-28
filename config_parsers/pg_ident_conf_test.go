@@ -54,9 +54,9 @@ superadmin		admin_app`
 
 func TestIdentParse(t *testing.T) {
 
-	var p pg_ident
+	var p Pg_ident
 	p.File_contents = sample_ident_conf
-	p.parse()
+	p.Parse()
 
 	answers := []struct {
 		mapname      string

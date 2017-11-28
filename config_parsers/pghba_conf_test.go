@@ -110,7 +110,7 @@ func TestPghba(t *testing.T) {
 
 	var p pg_ident
 	p.File_contents = sample_ident_conf
-	p.parse()
+	p.Parse()
 
 	answers := []struct {
 		mapname      string
