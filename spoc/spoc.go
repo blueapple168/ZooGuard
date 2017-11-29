@@ -9,6 +9,7 @@ import (
 	"golang.org/x/crypto/ssh"
 )
 
+//ConnInfo contains details regarding SSH connection of the servers
 type ConnInfo struct {
 	Server_name  string
 	Server_ip    string
@@ -16,10 +17,12 @@ type ConnInfo struct {
 	SSH_conn     *ssh.Client
 }
 
+//ClientConns has information regarding the SSH connection of all the servers
 type ClientConns struct {
 	Connections []*ConnInfo
 }
 
+//UpdateTag adds the Role of the server as a tag if not already present in the list
 func (c *ConnInfo) UpdateTag(tag string) (found bool) {
 	fmt.Println(c.Server_name, c.SSH_conn)
 	for _, v := range c.AppsInServer {
@@ -39,6 +42,7 @@ func (c *ConnInfo) UpdateTag(tag string) (found bool) {
 	return
 }
 
+//UpdateRole is used to update the role of a server
 func (c *ClientConns) UpdateRole(ip string, role string) (retBool bool) {
 	// connection := ClientConnections.GetServerByIp(ip)
 	conn := c.GetServerByIp(ip)
@@ -49,6 +53,7 @@ func (c *ClientConns) UpdateRole(ip string, role string) (retBool bool) {
 	return
 }
 
+//GetServerByIp gets the connection information of the server by it's IP
 func (c *ClientConns) GetServerByIp(ip string) (con *ConnInfo) {
 	// Loop over all the servers
 	// Return the matching server
@@ -65,6 +70,7 @@ func (c *ClientConns) GetServerByIp(ip string) (con *ConnInfo) {
 	return
 }
 
+//GetServerByName gets the connection information of the server by it's server name
 func (c *ClientConns) GetServerByName(name string) (con *ConnInfo) {
 
 	for _, v := range c.Connections {
@@ -141,24 +147,7 @@ func init() {
 	}
 }
 
-/*
-func SessionInfo(s string) (conninf *ssh.Client) {
-
-	keys := make([]string, 0, len(Clients))
-	for k := range Clients {
-		keys = append(keys, k)
-	}
-	for kk, v := range Clients {
-
-		if s == kk {
-			conninf = v
-		} else {
-			fmt.Println("")
-		}
-	}
-	return
-}*/
-
+//RunCommand is used to run any command on any  requested server
 func (c *ConnInfo) RunCommand(s string) (retStr string) {
 
 	var stdoutBuf bytes.Buffer

@@ -12,6 +12,7 @@ import (
 	_ "github.com/lib/pq"
 )
 
+//PostDB stores the configuration details of Postgres-XL database
 type PostDB struct {
 	Name            string
 	User            string
@@ -27,10 +28,13 @@ type PostDB struct {
 	Conn            *sql.DB
 }
 
+//PostConns has information regarding the various Postgres-XL databases connected
 type PostConns struct {
 	Connections []*PostDB
 }
 
+//GetByServerAndRole is used to get the database configuration
+//from the server name and the role of the node
 func (p *PostConns) GetByServerAndRole(server string, role string) (con PostDB, err error) {
 
 	for _, v := range p.Connections {
@@ -118,6 +122,7 @@ func connectPostgres(v zg_config.Database) {
 
 }
 
+//Query is used to run Select query on Postgres-XL database
 func (p_db *PostDB) Query(s string) (retVal []map[string]interface{}) {
 
 	rows, err := p_db.Conn.Query(s)
@@ -173,19 +178,10 @@ func (p_db *PostDB) Query(s string) (retVal []map[string]interface{}) {
 		fmt.Println(retVal)
 		return
 	}
-	return
 }
 
+//Exec is used to run Insert query on Postgres-XL database
 func (p_db *PostDB) Execute(s string) (err error) {
-
-	//connection, err := getConnection()
-	/*db, err := getConnection()
-
-	if err != nil {
-		return
-	}*/
-
-	//var error_messages []string
 
 	_, err = p_db.Conn.Exec(s)
 

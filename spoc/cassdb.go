@@ -9,6 +9,7 @@ import (
 	"github.com/gocql/gocql"
 )
 
+//CassDb is used to store configuration details of cassandra database
 type CassDB struct {
 	Host                  []string
 	UID                   string
@@ -25,8 +26,9 @@ type CassDB struct {
 	Session *gocql.Session
 }
 
+//CassConns has information regarding the various cassabdra databases connected
 type CassConns struct {
-	Connections []CassDB
+	Connections []*CassDB
 }
 
 func connectCassandra(v zg_config.Database) {
@@ -63,11 +65,12 @@ func connectCassandra(v zg_config.Database) {
 		fmt.Println("err")
 	} else {
 		fmt.Println("Connection succesfull")
-		CassConnections.Connections = append(CassConnections.Connections, cassdb)
+		CassConnections.Connections = append(CassConnections.Connections, &cassdb)
 	}
 
 }
 
+//Query is used to run Select query on Cassandra database
 func (c_db *CassDB) Query(s string) (retVal []map[string]interface{}) {
 
 	iter := c_db.Session.Query(s).Consistency(gocql.LocalOne).Iter()
@@ -75,15 +78,17 @@ func (c_db *CassDB) Query(s string) (retVal []map[string]interface{}) {
 
 	if err != nil {
 		fmt.Println("Error fetching the details", err)
-		return
+
 	} else {
 		retVal = result
 		fmt.Println(result)
-		return
+
 	}
+	return
 
 }
 
+//Exec is used to run Insert query on Cassandra database
 func (c_db *CassDB) Execute(s string) {
 
 	insertConsistency := c_db.WriteConsistency

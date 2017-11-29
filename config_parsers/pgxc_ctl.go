@@ -1,4 +1,4 @@
-package config_parsers
+package configParsers
 
 import (
 	"bufio"
@@ -12,6 +12,7 @@ import (
 	"github.com/dminGod/ZooGuard/spoc"
 )
 
+//Pgctl_parser is used to store pgxc_ctl.conf values
 type Pgctl_parser struct {
 	FileLocation string
 	RawConfig    map[string]string
@@ -20,11 +21,13 @@ type Pgctl_parser struct {
 	PopulateErrs []error
 }
 
+//Init is used to initialize RawConfig variable
 func (p *Pgctl_parser) Init() {
 
 	p.RawConfig = make(map[string]string)
 }
 
+//Parse parses the file from the FileLocation
 func (p *Pgctl_parser) Prase() {
 
 	// TODO : getting files directly is not correct -- make an abstraction that will return you
@@ -65,6 +68,7 @@ func (p *Pgctl_parser) Prase() {
 	p.Populate()
 }
 
+//ParseString is used to parse the content line by line and to format it
 func (p *Pgctl_parser) ParseString(str string) {
 
 	//str = log_collectors.GetPgxcConfig()
@@ -347,6 +351,7 @@ func (p *Pgctl_parser) Populate() {
 	p.MapToObj()
 }
 
+//MapToObj maps the values from the staging struct to the
 func (p *Pgctl_parser) MapToObj() {
 
 	all_servers := make(map[string]struct{})

@@ -1,4 +1,4 @@
-package config_parsers
+package configParsers
 
 import (
 	"testing"
@@ -92,7 +92,7 @@ gtm_connect_retry_interval = 1
 
 func TestGTMParse(t *testing.T) {
 
-	var p gtm_config
+	var p gtmConfig
 	p.File_contents = sample_gtm_conf
 	p.parse()
 

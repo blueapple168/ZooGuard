@@ -1,4 +1,4 @@
-package config_parsers
+package configParsers
 
 import (
 	"regexp"
@@ -11,6 +11,7 @@ type pg_ident_entry struct {
 	PgUsername     string
 }
 
+//Pg_ident is used to store pg_ident.conf values
 type Pg_ident struct {
 	Invalid_Entries []string
 	Entries         []pg_ident_entry
@@ -18,11 +19,13 @@ type Pg_ident struct {
 	File_contents   string
 }
 
+//Set_contents is used to set the File_contents to be used
 func (pg *Pg_ident) Set_contents(file_contents string) {
 
 	pg.File_contents = file_contents
 }
 
+//Parse parses the file content and populates Pg_ident
 func (pg *Pg_ident) Parse() {
 
 	if len(pg.File_contents) == 0 {

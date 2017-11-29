@@ -1,4 +1,4 @@
-package config_parsers
+package configParsers
 
 import (
 	"regexp"
@@ -7,7 +7,7 @@ import (
 	"github.com/mitchellh/mapstructure"
 )
 
-type gtm_config struct {
+type gtmConfig struct {
 	File_contents string
 
 	Nodename                   string
@@ -25,7 +25,7 @@ type gtm_config struct {
 	Kv_pairs                   map[string]string
 }
 
-func (gc *gtm_config) parse() {
+func (gc *gtmConfig) parse() {
 
 	re_blank := regexp.MustCompile(`^[ \t]*$`)
 	re_comment := regexp.MustCompile(`^[ \t]*#`)

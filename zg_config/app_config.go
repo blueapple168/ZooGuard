@@ -4,13 +4,12 @@ import (
 	"errors"
 	"flag"
 	"fmt"
-	"github.com/spf13/viper"
 	"os"
-	"strings"
 	"runtime"
+	"strings"
+
+	"github.com/spf13/viper"
 )
-
-
 
 type http struct {
 	HttpEnabled bool
@@ -38,6 +37,7 @@ type zg_configuration struct {
 	Ctl_file_local_path string
 }
 
+//Server is used to store the details regarding a server from the config file
 type Server struct {
 	Server_name  string
 	Server_ip    string
@@ -46,8 +46,8 @@ type Server struct {
 	Ssh_password string
 }
 
+//App is used to store the details regarding an application from the config file
 type App struct {
-
 	Application_type       string
 	Application_unique_key string
 	Server                 string
@@ -69,8 +69,8 @@ type App struct {
 	Pgxc_ctl_server string
 }
 
+//Database is used to store the details of the database from the config file
 type Database struct {
-
 	Username                        string
 	Password                        string
 	DatabaseName                    string
@@ -89,6 +89,8 @@ type Database struct {
 	Cassandra_WriteConsistency      int
 }
 
+//ZgConfig stores all the information regarding servers, database, applications
+// received from the config file
 type ZgConfig struct {
 	Zgconf   zg_configuration
 	Http     http
@@ -159,6 +161,7 @@ func GetConfiguration() {
 
 }
 
+//GetConfig gets the configuration details from the .toml file
 func GetConfig() ZgConfig {
 
 	if configLoaded == true {
@@ -170,27 +173,6 @@ func GetConfig() ZgConfig {
 
 	return Config
 
-	/*
-		configFile, err := getConfigFile()
-
-		if err != nil {
-
-			fmt.Println("There were errors during fetching application config")
-			for _, e := range err {
-
-				fmt.Println(e.Error())
-			}
-
-			fmt.Print("Error marshaling config ", e2)
-		}
-
-		if verr != nil {
-
-			fmt.Println("There was an error reading in configuration. Error : ", verr.Error())
-		}
-
-		configLoaded = true
-	*/
 }
 
 func ShowConfig() {

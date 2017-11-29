@@ -1,4 +1,4 @@
-package config_parsers
+package configParsers
 
 import (
 	"errors"
@@ -250,11 +250,13 @@ type Pg_conf struct {
 	Kv_pairs                            map[string]string
 }
 
+//Set_contents is used to set the File_contents to be used
 func (pc *Pg_conf) Set_contents(file_contents string) {
 
 	pc.File_contents = file_contents
 }
 
+//Parse parses the file content and populates Pg_conf
 func (pc *Pg_conf) Parse() (errs error) {
 
 	if len(pc.File_contents) == 0 {

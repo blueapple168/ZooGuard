@@ -6,6 +6,7 @@ import (
 	"github.com/dminGod/ZooGuard/zg_config"
 )
 
+//AppConfigure is used to store configuration details of the application
 type AppConfigure struct {
 	ApplicationType      string
 	ApplicationUniqueKey string
@@ -16,8 +17,9 @@ type AppConfigure struct {
 	ConfigFile           string
 }
 
+//AppConns stores an array of AppConfigure containing details of various applications
 type AppConns struct {
-	Connections []AppConfigure
+	Connections []*AppConfigure
 }
 
 func connectApps(v zg_config.App) {
@@ -31,7 +33,7 @@ func connectApps(v zg_config.App) {
 	app.HTTPPort = v.Http_port
 	app.ConfigFile = v.Config_file
 
-	AppConnections.Connections = append(AppConnections.Connections, app)
+	AppConnections.Connections = append(AppConnections.Connections, &app)
 	fmt.Println("App configured")
 
 }

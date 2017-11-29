@@ -1,4 +1,4 @@
-package config_parsers
+package configParsers
 
 import (
 	"github.com/dminGod/ZooGuard/spoc"
@@ -299,6 +299,7 @@ type datanode_slave struct {
 	DatanodeSlavePoolerPort string
 }
 
+//PgConf is a struct used to store values temporarily, irrespective of the node type
 type PgConf struct {
 	ServerIp            string
 	PgDir               string
@@ -312,6 +313,7 @@ type PgConf struct {
 	Role                string
 }
 
+//PgNode interface provides with the methods to get and set the configuration of all the nodes
 type PgNode interface {
 	GetPgConfig() PgConf
 	SetPgConfig(Pg_conf) bool

@@ -1,4 +1,4 @@
-package config_parsers
+package configParsers
 
 import (
 	"regexp"
@@ -13,6 +13,8 @@ type pg_hba_entry struct {
 	Method   string
 }
 
+// Pg_hba is used to store pg_hba.conf values and to be able to
+// use the methods from other packages
 type Pg_hba struct {
 	Invalid_Entries []string
 	Entries         []pg_hba_entry
@@ -20,11 +22,13 @@ type Pg_hba struct {
 	File_contents   string
 }
 
+//Set_contents is used to set the File_contents to be used
 func (pg *Pg_hba) Set_contents(file_contents string) {
 
 	pg.File_contents = file_contents
 }
 
+//Parse parses the file content and populates Pg_hba
 func (pg *Pg_hba) Parse() {
 
 	if len(pg.File_contents) == 0 {

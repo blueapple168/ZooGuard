@@ -1,4 +1,4 @@
-package config_parsers
+package configParsers
 
 import (
 	"testing"
@@ -108,15 +108,18 @@ host all serverusr 0.0.0.0/0 trust
 
 func TestPghba(t *testing.T) {
 
-	var p pg_ident
-	p.File_contents = sample_ident_conf
+	var p Pg_hba
+	//p.Set_contents(pghba_sample)
+	p.File_contents = pghba_sample
 	p.Parse()
 
 	answers := []struct {
-		mapname      string
-		sys_username string
-		pg_username  string
-	}{{"superadmin", "admin_app", "adminnn"}, {"superadmin", "admin_app2", "adminnn2"}}
+		pgtype   string
+		database string
+		user     string
+		address  string
+		method   string
+	}{{"host", "all", "all", "127.0.0.1/32", "trust"}, {"host", "all", "all", "::1/128", "trust"}, {"host", "all", "serverusr", "0.0.0.0/0", "trust"}}
 
 	var issue bool
 
@@ -126,10 +129,11 @@ func TestPghba(t *testing.T) {
 
 		for _, vv := range p.Entries {
 
-			if vv.Mapname == v.mapname && vv.PgUsername == v.pg_username && vv.SystemUsername == v.sys_username {
+			if vv.Type == v.pgtype && vv.Database == v.database && vv.User == v.user && vv.Address == v.address && vv.Method == v.method {
 
 				met = true
 			}
+
 		}
 
 		if met == false {
@@ -138,14 +142,14 @@ func TestPghba(t *testing.T) {
 		}
 	}
 
-	if len(p.Entries) != 2 {
+	if len(p.Entries) != 3 {
 
 		issue = true
 	}
 
 	if issue == true {
 
-		t.Errorf("Unexpected response from parsing Pg_ident, Obj : %v", p)
+		t.Errorf("Unexpected response from parsing Pg_hba, Obj : %v", p)
 		t.Fail()
 	}
 }
