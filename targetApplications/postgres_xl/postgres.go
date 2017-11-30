@@ -1,4 +1,4 @@
-package target_applications
+package targetApplications
 
 import (
 	"fmt"
@@ -7,12 +7,12 @@ import (
 	"github.com/dminGod/ZooGuard/spoc"
 )
 
-var PgCluster configParsers.Pgctl_parser
-var PgConf configParsers.PgConf
+var PgCluster configParsers.PgctlParser
+var PgConf configParsers.PGConfig
 
-//Load_cluster gets the information from the pgxc_ctl.conf file
+//LoadCluster gets the information from the pgxc_ctl.conf file
 //and loads the clusters of the application
-func Load_cluster() {
+func LoadCluster() {
 
 	PgCluster.Init()
 
@@ -45,25 +45,25 @@ func Load_cluster() {
 
 			for i := range PgCluster.Cluster.Datanodes {
 
-				PgNode_details(&(PgCluster.Cluster.Datanodes[i]))
+				PgNodeDetails(&(PgCluster.Cluster.Datanodes[i]))
 				fmt.Printf("Datanode Server Configuration:\n \n Datanode Ident configuration\n %+v \n Datanode HBAConfiguration\n %+v\n", PgCluster.Cluster.Datanodes[i].IdentConfiguration, PgCluster.Cluster.Datanodes[i].HbaConfiguration)
 			}
 
 			/*for i, _ := range PgCluster.Cluster.Coord {
-				PgNode_details(&(PgCluster.Cluster.Coord[i]))
+				PgNodeDetails(&(PgCluster.Cluster.Coord[i]))
 				//fmt.Println("Coord server config:", PgCluster.Cluster.Coord[i].ServerConfiguration)
 
 			}
 
 			for i, _ := range PgCluster.Cluster.DatanodeSlaves {
 
-				PgNode_details(&(PgCluster.Cluster.DatanodeSlaves[i]))
+				PgNodeDetails(&(PgCluster.Cluster.DatanodeSlaves[i]))
 				//fmt.Println("Datanode slave configuration", PgCluster.Cluster.DatanodeSlaves[i].ServerConfiguration)
 			}
 
 			for i, _ := range PgCluster.Cluster.CoordSlaves {
 
-				PgNode_details(&(PgCluster.Cluster.CoordSlaves[i]))
+				PgNodeDetails(&(PgCluster.Cluster.CoordSlaves[i]))
 
 			}*/
 
@@ -73,13 +73,13 @@ func Load_cluster() {
 
 				if v.ServerConn != nil {
 					fmt.Println("proxy dir:", v.GtmProxyDir)
-					fmt.Println(v.ServerConn.Server_ip)
+					fmt.Println(v.ServerConn.ServerIP)
 					kk := spoc.RunCommand(v.ServerConn, cmd)
 					fmt.Println("printing kk of gtmproxy", kk)
 
 					var pp configParsers.Pg_conf
 
-					pp.Set_contents(kk)
+					pp.SetContents(kk)
 					pp.Parse()
 
 					PgCluster.Cluster.GTMProxies[i].ServerConfiguration = pp
@@ -99,7 +99,7 @@ func Load_cluster() {
 
 				var pp configParsers.Pg_conf
 
-				pp.Set_contents(kk)
+				pp.SetContents(kk)
 				pp.Parse()
 
 				PgCluster.Cluster.GtmMaster.ServerConfiguration = pp
@@ -118,7 +118,7 @@ func Load_cluster() {
 
 				var ppp configParsers.Pg_conf
 
-				ppp.Set_contents(kkk)
+				ppp.SetContents(kkk)
 				ppp.Parse()
 
 				PgCluster.Cluster.GtmSlave.ServerConfiguration = ppp
@@ -131,33 +131,33 @@ func Load_cluster() {
 	}
 }
 
-//PgNode_details gets the configuration of all the nodes in the postgres-xl database
-func PgNode_details(p configParsers.PgNode) {
+//PgNodeDetails gets the configuration of all the nodes in the postgres-xl database
+func PgNodeDetails(p configParsers.PgNode) {
 
 	k := p.GetPgConfig()
 
 	//postgresql.conf
-	var pp configParsers.Pg_conf
-	//fmt.Println("Directory is:", k.PgDir, k.ServerIp)
+	var pp configParsers.PgConf
+	//fmt.Println("Directory is:", k.PgDir, k.ServerIP)
 	cmd := fmt.Sprintf("cat %v/postgresql.conf", k.PgDir)
 	s := spoc.RunCommand(k.Conn, cmd)
-	pp.Set_contents(s)
+	pp.SetContents(s)
 	pp.Parse()
 	p.SetPgConfig(pp)
 
 	//pg_ident.conf
-	var pg configParsers.Pg_ident
+	var pg configParsers.PgIdent
 	cmdi := fmt.Sprintf("cat %v/pg_ident.conf", k.PgDir)
 	si := spoc.RunCommand(k.Conn, cmdi)
-	pg.Set_contents(si)
+	pg.SetContents(si)
 	pg.Parse()
 	p.SetIdentConfig(pg)
 
 	//pg_hba.conf
-	var ph configParsers.Pg_hba
+	var ph configParsers.PgHba
 	cmdh := fmt.Sprintf("cat %v/pg_hba.conf", k.PgDir)
 	sh := spoc.RunCommand(k.Conn, cmdh)
-	ph.Set_contents(sh)
+	ph.SetContents(sh)
 	ph.Parse()
 	p.SetHbaConfig(ph)
 

@@ -5,14 +5,14 @@ import (
 )
 
 const (
-	sample_gtm_conf = `
+	sampleGtmConf = `
 #-----------------------------
 # GTM Proxy configuration file
 #-----------------------------
 #
 # This file must be placed on gtm working directory
-# specified by -D command line option of gtm_proxy or gtm_ctl.
-# The configuration file name must be "gtm_proxy.conf"
+# specified by -D command line option of gtmProxy or gtm_ctl.
+# The configuration file name must be "gtmProxy.conf"
 #
 #
 # This file consists of lines of the form
@@ -68,10 +68,10 @@ gtm_port = 6668 					# Port number of the active GTM.
 #------------------------------------------------------------------------------
 # Other options
 #------------------------------------------------------------------------------
-#keepalives_idle = 0			# Keepalives_idle parameter.
-#keepalives_interval = 0		# Keepalives_interval parameter.
-#keepalives_count = 0			# Keepalives_count internal parameter.
-#log_file = 'gtm_proxy.log'		# Log file name
+#keepalives_idle = 0			# KeepalivesIdle parameter.
+#keepalives_interval = 0		# KeepalivesInterval parameter.
+#keepalives_count = 0			# KeepalivesCount internal parameter.
+#log_file = 'gtmProxy.log'		# Log file name
 #log_min_messages = WARNING		# log_min_messages.  Default WARNING.
 							  	# Valid value: DEBUG, DEBUG5, DEBUG4, DEBUG3,
 								# DEBUG2, DEBUG1, INFO, NOTICE, WARNING,
@@ -93,7 +93,7 @@ gtm_connect_retry_interval = 1
 func TestGTMParse(t *testing.T) {
 
 	var p gtmConfig
-	p.File_contents = sample_gtm_conf
+	p.FileContents = sampleGtmConf
 	p.parse()
 
 	/*
@@ -106,7 +106,7 @@ func TestGTMParse(t *testing.T) {
 		gtm_connect_retry_interval = 1
 	*/
 
-	if p.Nodename != `gtm_pxy1` || p.Listen_addresses != `*` || p.Gtm_host != `10.0.1.5` || p.Gtm_port != `8080` || p.Worker_threads != `1` || p.Gtm_connect_retry_interval != `1` {
+	if p.Nodename != `gtm_pxy1` || p.ListenAddresses != `*` || p.GtmHost != `10.0.1.5` || p.GtmPort != `8080` || p.WorkerThreads != `1` || p.GtmConnectRetryInterval != `1` {
 
 		t.Errorf("GTM Proxy parser got unexpected results -- Returned Object %v", p)
 		t.Fail()

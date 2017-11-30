@@ -3,7 +3,7 @@ package spoc
 import (
 	"fmt"
 
-	"github.com/dminGod/ZooGuard/zg_config"
+	"github.com/dminGod/ZooGuard/zgConfig"
 )
 
 //AppConfigure is used to store configuration details of the application
@@ -22,16 +22,16 @@ type AppConns struct {
 	Connections []*AppConfigure
 }
 
-func connectApps(v zg_config.App) {
+func connectApps(v zgConfig.App) {
 
 	var app AppConfigure
-	app.ApplicationType = v.Application_type
-	app.ApplicationUniqueKey = v.Application_unique_key
+	app.ApplicationType = v.ApplicationType
+	app.ApplicationUniqueKey = v.ApplicationUniqueKey
 	app.Server = v.Server
-	app.AppPort = v.Native_port
-	app.GRPCPort = v.Hector_Grpc_port
-	app.HTTPPort = v.Http_port
-	app.ConfigFile = v.Config_file
+	app.AppPort = v.NativePort
+	app.GRPCPort = v.HectorGrpcPort
+	app.HTTPPort = v.HTTPPort
+	app.ConfigFile = v.ConfigFile
 
 	AppConnections.Connections = append(AppConnections.Connections, &app)
 	fmt.Println("App configured")

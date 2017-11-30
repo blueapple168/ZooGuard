@@ -5,7 +5,7 @@ import (
 )
 
 const (
-	pghba_sample = `
+	pghbaSample = `
 # PostgreSQL Client Authentication Configuration File
 # ===================================================
 #
@@ -108,9 +108,9 @@ host all serverusr 0.0.0.0/0 trust
 
 func TestPghba(t *testing.T) {
 
-	var p Pg_hba
-	//p.Set_contents(pghba_sample)
-	p.File_contents = pghba_sample
+	var p PgHba
+	//p.SetContents(pghbaSample)
+	p.FileContents = pghbaSample
 	p.Parse()
 
 	answers := []struct {
@@ -149,7 +149,7 @@ func TestPghba(t *testing.T) {
 
 	if issue == true {
 
-		t.Errorf("Unexpected response from parsing Pg_hba, Obj : %v", p)
+		t.Errorf("Unexpected response from parsing PgHba, Obj : %v", p)
 		t.Fail()
 	}
 }

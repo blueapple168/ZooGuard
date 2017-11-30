@@ -1,4 +1,4 @@
-package zg_config
+package zgConfig
 
 import (
 	"errors"
@@ -12,99 +12,99 @@ import (
 )
 
 type http struct {
-	HttpEnabled bool
-	HttpPort    int
+	HTTPEnabled bool
+	HTTPPort    int
 }
 
-type Remote_server struct {
-	Ip_or_host        string
-	Connection_method string // This will be password / key
+type RemoteServer struct {
+	IpOrHost         string
+	ConnectionMethod string // This will be password / key
 
 	Username string
 	Password string // Will be used if the way to connect is with password
 
-	Key_file_location string //
+	KeyFileLocation string //
 
 }
 
-type zg_configuration struct {
+type zgConfiguration struct {
 
 	// How to fetch the pgxc_ctl file?
-	Ctl_file_is_remote bool // if
+	CtlFileIsRemote bool // if
 
 	// Remote pgxc_ctl file settings
 
-	Ctl_file_local_path string
+	CtlFileLocalPath string
 }
 
 //Server is used to store the details regarding a server from the config file
 type Server struct {
-	Server_name  string
-	Server_ip    string
-	Environment  string
-	Ssh_user     string
-	Ssh_password string
+	ServerName  string
+	ServerIP    string
+	Environment string
+	SSHUser     string
+	SSHPassword string
 }
 
 //App is used to store the details regarding an application from the config file
 type App struct {
-	Application_type       string
-	Application_unique_key string
-	Server                 string
+	ApplicationType      string
+	ApplicationUniqueKey string
+	Server               string
 
-	Hector_Grpc_port string
-	Http_port        string
-	Native_port      string
+	HectorGrpcPort string
+	HTTPPort       string
+	NativePort     string
 
-	Config_file string
+	ConfigFile string
 
-	Config_folder string
+	ConfigFolder string
 
-	Component_name   string
-	Installed_server string
+	ComponentName   string
+	InstalledServer string
 
-	Cluster_servers []string
-	Seed_servers    []string
+	ClusterServers []string
+	SeedServers    []string
 
-	Pgxc_ctl_server string
+	PgxcCtlServer string
 }
 
 //Database is used to store the details of the database from the config file
 type Database struct {
-	Username                        string
-	Password                        string
-	DatabaseName                    string
-	DatabaseType                    string
-	Host                            []string
-	Parent_App_Name                 string
-	Linked_Component                string
-	Parent_Type                     string
-	Component_Role                  string
-	Db_Identity                     string
-	Cassandra_NumConnectionsPerHost int
-	Cassandra_ConnectionTimeout     int
-	Cassandra_SocketKeepAlive       int
-	Cassandra_NumberOfQueryRetries  int
-	Cassandra_ReadConsistency       int
-	Cassandra_WriteConsistency      int
+	Username                       string
+	Password                       string
+	DatabaseName                   string
+	DatabaseType                   string
+	Host                           []string
+	ParentAppName                  string
+	LinkedComponent                string
+	ParentType                     string
+	ComponentRole                  string
+	DbIdentity                     string
+	CassandraNumConnectionsPerHost int
+	CassandraConnectionTimeout     int
+	CassandraSocketKeepAlive       int
+	CassandraNumberOfQueryRetries  int
+	CassandraReadConsistency       int
+	CassandraWriteConsistency      int
 }
 
 //ZgConfig stores all the information regarding servers, database, applications
 // received from the config file
 type ZgConfig struct {
-	Zgconf   zg_configuration
-	Http     http
+	Zgconf   zgConfiguration
+	HTTP     http
 	Servers  []Server
 	Apps     []App
 	Database []Database
 }
 
 // Dont need to add the .toml in the name here
-var configFile string = "zg.toml"
+var configFile  = "zg.toml"
 
 // With trailing slash
-var linuxConfigFolders []string = []string{"/etc/"}
-var windowsConfigFolders []string = []string{"\\zg\\"}
+var linuxConfigFolders = []string{"/etc/"}
+var windowsConfigFolders = []string{"\\zg\\"}
 var ViConfig *viper.Viper
 var configLoaded bool
 
@@ -145,7 +145,9 @@ func GetConfiguration() {
 
 	verr := ViConfig.ReadInConfig()
 
+	fmt.Println(Config)
 	e2 := ViConfig.Unmarshal(&Config)
+
 
 	if e2 != nil {
 
@@ -164,17 +166,16 @@ func GetConfiguration() {
 //GetConfig gets the configuration details from the .toml file
 func GetConfig() ZgConfig {
 
-	if configLoaded == true {
+	if configLoaded == false {
 
-		return Config
-	} else {
 		GetConfiguration()
 	}
+		return Config
 
-	return Config
 
 }
 
+//ShowConfig shows the configuration from the .toml file
 func ShowConfig() {
 
 	fmt.Println(ViConfig.AllSettings())
@@ -207,7 +208,7 @@ func getConfigFile() (retFilePath string, retErrors []error) {
 
 		if len(winFolders) == 0 {
 
-			retErrors = append(retErrors, errors.New("Windows, no drives found when searching for config."))
+			retErrors = append(retErrors, errors.New("windows, no drives found when searching for config"))
 		}
 
 	FileChecking:

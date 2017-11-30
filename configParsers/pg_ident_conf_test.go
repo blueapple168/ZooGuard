@@ -5,7 +5,7 @@ import (
 )
 
 const (
-	sample_ident_conf = `# PostgreSQL User Name Maps
+	sampleIdentConf = `# PostgreSQL User Name Maps
 # =========================
 #
 # Refer to the PostgreSQL documentation, chapter "Client
@@ -54,14 +54,14 @@ superadmin		admin_app`
 
 func TestIdentParse(t *testing.T) {
 
-	var p Pg_ident
-	p.File_contents = sample_ident_conf
+	var p PgIdent
+	p.FileContents = sampleIdentConf
 	p.Parse()
 
 	answers := []struct {
-		mapname      string
-		sys_username string
-		pg_username  string
+		mapname     string
+		sysUsername string
+		pgUsername  string
 	}{{"superadmin", "admin_app", "adminnn"}, {"superadmin", "admin_app2", "adminnn2"}}
 
 	var issue bool
@@ -72,7 +72,7 @@ func TestIdentParse(t *testing.T) {
 
 		for _, vv := range p.Entries {
 
-			if vv.Mapname == v.mapname && vv.PgUsername == v.pg_username && vv.SystemUsername == v.sys_username {
+			if vv.Mapname == v.mapname && vv.PgUsername == v.pgUsername && vv.SystemUsername == v.sysUsername {
 
 				met = true
 			}
@@ -91,7 +91,7 @@ func TestIdentParse(t *testing.T) {
 
 	if issue == true {
 
-		t.Errorf("Unexpected response from parsing Pg_ident, Obj : %v", p)
+		t.Errorf("Unexpected response from parsing PgIdent, Obj : %v", p)
 		t.Fail()
 	}
 }

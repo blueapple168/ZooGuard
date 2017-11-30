@@ -5,16 +5,16 @@ import (
 	"fmt"
 	"net"
 
-	"github.com/dminGod/ZooGuard/zg_config"
+	"github.com/dminGod/ZooGuard/zgConfig"
 	"golang.org/x/crypto/ssh"
 )
 
 //ConnInfo contains details regarding SSH connection of the servers
 type ConnInfo struct {
-	Server_name  string
-	Server_ip    string
+	ServerName   string
+	ServerIP     string
 	AppsInServer []string // D30, D40, Datanode Master, Datanode Slave, GTM, Postgresxl,
-	SSH_conn     *ssh.Client
+	SSHConn      *ssh.Client
 }
 
 //ClientConns has information regarding the SSH connection of all the servers
@@ -24,7 +24,7 @@ type ClientConns struct {
 
 //UpdateTag adds the Role of the server as a tag if not already present in the list
 func (c *ConnInfo) UpdateTag(tag string) (found bool) {
-	fmt.Println(c.Server_name, c.SSH_conn)
+	fmt.Println(c.ServerName, c.SSHConn)
 	for _, v := range c.AppsInServer {
 
 		if tag == v {
@@ -35,7 +35,7 @@ func (c *ConnInfo) UpdateTag(tag string) (found bool) {
 	if !found {
 
 		c.AppsInServer = append(c.AppsInServer, tag)
-		fmt.Println(c.AppsInServer, c.Server_ip, c.SSH_conn)
+		fmt.Println(c.AppsInServer, c.ServerIP, c.SSHConn)
 		return
 	}
 
@@ -44,8 +44,8 @@ func (c *ConnInfo) UpdateTag(tag string) (found bool) {
 
 //UpdateRole is used to update the role of a server
 func (c *ClientConns) UpdateRole(ip string, role string) (retBool bool) {
-	// connection := ClientConnections.GetServerByIp(ip)
-	conn := c.GetServerByIp(ip)
+	// connection := ClientConnections.GetServerByIP(ip)
+	conn := c.GetServerByIP(ip)
 
 	retBool = conn.UpdateTag(role)
 	// connection.UpdateTag(string)
@@ -53,17 +53,17 @@ func (c *ClientConns) UpdateRole(ip string, role string) (retBool bool) {
 	return
 }
 
-//GetServerByIp gets the connection information of the server by it's IP
-func (c *ClientConns) GetServerByIp(ip string) (con *ConnInfo) {
+//GetServerByIP gets the connection information of the server by it's IP
+func (c *ClientConns) GetServerByIP(ip string) (con *ConnInfo) {
 	// Loop over all the servers
 	// Return the matching server
 	ip += ":22"
 	fmt.Println("serverbyip", ip)
 	for _, v := range c.Connections {
 
-		if ip == v.Server_ip {
+		if ip == v.ServerIP {
 			con = v
-			fmt.Println("assigned server", con.Server_ip)
+			fmt.Println("assigned server", con.ServerIP)
 			return
 		}
 	}
@@ -77,9 +77,9 @@ func (c *ClientConns) GetServerByName(name string) (con *ConnInfo) {
 
 		k := *v
 
-		fmt.Println(k.Server_name)
+		fmt.Println(k.ServerName)
 
-		if name == k.Server_name {
+		if name == k.ServerName {
 			con = v
 		}
 	}
@@ -87,7 +87,7 @@ func (c *ClientConns) GetServerByName(name string) (con *ConnInfo) {
 
 }
 
-var Conf zg_config.ZgConfig
+var Conf zgConfig.ZgConfig
 
 var ClientConnections ClientConns
 var CassConnections CassConns
@@ -96,32 +96,32 @@ var AppConnections AppConns
 
 func init() {
 
-	Conf = zg_config.GetConfig()
+	Conf = zgConfig.GetConfig()
 
 	for _, v := range Conf.Servers {
 
 		var conninfo ConnInfo
 
 		config := &ssh.ClientConfig{
-			User: v.Ssh_user,
+			User: v.SSHUser,
 			Auth: []ssh.AuthMethod{
-				ssh.Password(v.Ssh_password),
+				ssh.Password(v.SSHPassword),
 			},
 			HostKeyCallback: func(hostname string, remote net.Addr, key ssh.PublicKey) error {
 				return nil
 			},
 		}
 
-		c, err := ssh.Dial("tcp", v.Server_ip, config)
+		c, err := ssh.Dial("tcp", v.ServerIP, config)
 
 		if err != nil {
 			fmt.Println("Error during establishing connection : ", err)
 
 		} else {
-			fmt.Println("Added ip to config", v.Server_ip, v.Server_name)
-			conninfo.Server_ip = v.Server_ip
-			conninfo.Server_name = v.Server_name
-			conninfo.SSH_conn = c
+			fmt.Println("Added ip to config", v.ServerIP, v.ServerName)
+			conninfo.ServerIP = v.ServerIP
+			conninfo.ServerName = v.ServerName
+			conninfo.SSHConn = c
 
 			ClientConnections.Connections = append(ClientConnections.Connections, &conninfo)
 		}
@@ -156,7 +156,7 @@ func (c *ConnInfo) RunCommand(s string) (retStr string) {
 
 	fmt.Printf("%+v", c)
 
-	if c.SSH_conn == nil {
+	if c.SSHConn == nil {
 
 		fmt.Println("SSH is nil")
 	} else {
@@ -164,16 +164,16 @@ func (c *ConnInfo) RunCommand(s string) (retStr string) {
 		fmt.Println("SSH is not nil")
 	}
 
-	k := c.SSH_conn
+	k := c.SSHConn
 
 	if k == nil {
 
 		fmt.Printf("K is nil %v", k)
 		return
-	} else {
+	}
 
 		fmt.Printf("K is not nil %v", k)
-	}
+
 
 	sess, err := k.NewSession()
 

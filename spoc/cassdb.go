@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/dminGod/ZooGuard/zg_config"
+	"github.com/dminGod/ZooGuard/zgConfig"
 	"github.com/gocql/gocql"
 )
 
@@ -31,21 +31,21 @@ type CassConns struct {
 	Connections []*CassDB
 }
 
-func connectCassandra(v zg_config.Database) {
+func connectCassandra(v zgConfig.Database) {
 	var cassdb CassDB
 	cassdb.Host = v.Host
 	cassdb.UID = v.Username
 	cassdb.Pass = v.Password
-	cassdb.WriteConsistency = v.Cassandra_WriteConsistency
+	cassdb.WriteConsistency = v.CassandraWriteConsistency
 
-	// gocql.NumConnctions = v.Cassandra_NumConnectionsPerHost
+	// gocql.NumConnctions = v.CassandraNumConnectionsPerHost
 
 	cluster := gocql.NewCluster(cassdb.Host...)
 	cluster.Keyspace = "system"
 	cluster.ProtoVersion = 3
-	cluster.Timeout = time.Duration(v.Cassandra_ConnectionTimeout) * time.Second
-	cluster.SocketKeepalive = time.Duration(v.Cassandra_SocketKeepAlive) * time.Second
-	cluster.RetryPolicy = &gocql.SimpleRetryPolicy{NumRetries: v.Cassandra_NumberOfQueryRetries}
+	cluster.Timeout = time.Duration(v.CassandraConnectionTimeout) * time.Second
+	cluster.SocketKeepalive = time.Duration(v.CassandraSocketKeepAlive) * time.Second
+	cluster.RetryPolicy = &gocql.SimpleRetryPolicy{NumRetries: v.CassandraNumberOfQueryRetries}
 
 	cluster.Authenticator = gocql.PasswordAuthenticator{
 		Username: cassdb.UID,
@@ -88,7 +88,7 @@ func (c_db *CassDB) Query(s string) (retVal []map[string]interface{}) {
 
 }
 
-//Exec is used to run Insert query on Cassandra database
+//Execute is used to run Insert query on Cassandra database
 func (c_db *CassDB) Execute(s string) {
 
 	insertConsistency := c_db.WriteConsistency

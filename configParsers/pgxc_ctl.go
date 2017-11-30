@@ -12,23 +12,23 @@ import (
 	"github.com/dminGod/ZooGuard/spoc"
 )
 
-//Pgctl_parser is used to store pgxc_ctl.conf values
-type Pgctl_parser struct {
+//PgctlParser is used to store pgxc_ctl.conf values
+type PgctlParser struct {
 	FileLocation string
 	RawConfig    map[string]string
-	St           pgctl_staging_config
-	Cluster      pgxc_cluster
+	St           pgctlStagingConfig
+	Cluster      pgxcCluster
 	PopulateErrs []error
 }
 
 //Init is used to initialize RawConfig variable
-func (p *Pgctl_parser) Init() {
+func (p *PgctlParser) Init() {
 
 	p.RawConfig = make(map[string]string)
 }
 
 //Parse parses the file from the FileLocation
-func (p *Pgctl_parser) Prase() {
+func (p *PgctlParser) Prase() {
 
 	// TODO : getting files directly is not correct -- make an abstraction that will return you
 	// This guy should not be bothered to get stuff from other systems on the network
@@ -69,7 +69,7 @@ func (p *Pgctl_parser) Prase() {
 }
 
 //ParseString is used to parse the content line by line and to format it
-func (p *Pgctl_parser) ParseString(str string) {
+func (p *PgctlParser) ParseString(str string) {
 
 	//str = log_collectors.GetPgxcConfig()
 
@@ -83,7 +83,7 @@ func (p *Pgctl_parser) ParseString(str string) {
 }
 
 // Individual Line parsing, remove the comments, keep the key-value pairs
-func (p *Pgctl_parser) interpret_line(curLine string) {
+func (p *PgctlParser) interpret_line(curLine string) {
 
 	matBool, _ := regexp.Match("^( +|\t+)?[#-]", []byte(curLine))
 	hasEqualTo := strings.Contains(curLine, "=")
@@ -113,7 +113,7 @@ func (p *Pgctl_parser) interpret_line(curLine string) {
 }
 
 // This module will take the individual lines and start populating objects based on the lines
-func (p *Pgctl_parser) Populate() {
+func (p *PgctlParser) Populate() {
 
 	// First we will just map our values and set them correctly in the flat string:(string/[]string) --
 	// Once the mapping on that level is done then we will start putting things in objects.
@@ -352,9 +352,9 @@ func (p *Pgctl_parser) Populate() {
 }
 
 //MapToObj maps the values from the staging struct to the
-func (p *Pgctl_parser) MapToObj() {
+func (p *PgctlParser) MapToObj() {
 
-	all_servers := make(map[string]struct{})
+	allServers := make(map[string]struct{})
 
 	// Check for the counts and make sure they match, else throw out the user...
 	coordsOkay := countsMatch(p.St.CoordMasterServers, p.St.CoordMasterDirs, p.St.PoolerPorts, p.St.CoordPorts)
@@ -388,7 +388,7 @@ func (p *Pgctl_parser) MapToObj() {
 	// Map the GTM Slave, if there is one..
 	if p.St.GtmSlave {
 
-		p.Cluster.GtmSlave = gtm_slave{
+		p.Cluster.GtmSlave = gtmSlave{
 			GtmSlaveServer:              p.St.GtmSlaveServer,
 			GtmSlaveDir:                 p.St.GtmSlaveDir,
 			GtmSlaveName:                p.St.GtmSlaveName,
@@ -397,18 +397,18 @@ func (p *Pgctl_parser) MapToObj() {
 		}
 
 		p.Cluster.GtmSlave.ServerConn = getConnection(p.Cluster.GtmSlave.GtmSlaveServer)
-		updateRoles(p.Cluster.GtmSlave.GtmSlaveServer, "gtm_slave")
-		all_servers[p.St.GtmSlaveServer] = struct{}{}
+		updateRoles(p.Cluster.GtmSlave.GtmSlaveServer, "gtmSlave")
+		allServers[p.St.GtmSlaveServer] = struct{}{}
 	}
 
 	// get connection pointer to this server from spoc -- if there then add it
 	// to each of the components
 
 	// update the role of the server to add tags
-	// spoc.Connectsion.UpdateRoleByIP(GtmMasterServer, 'gtm_master')
+	// spoc.Connectsion.UpdateRoleByIP(GtmMasterServer, 'gtmMaster')
 
 	// Add the GTM Master
-	p.Cluster.GtmMaster = gtm_master{
+	p.Cluster.GtmMaster = gtmMaster{
 		GtmName:                      p.St.GtmName,
 		GtmMasterServer:              p.St.GtmMasterServer,
 		GtmExtraConfig:               p.St.GtmExtraConfig,
@@ -418,20 +418,20 @@ func (p *Pgctl_parser) MapToObj() {
 		GtmSlave:                     p.Cluster.GtmSlave,
 		HasSlave:                     p.St.GtmSlave,
 	}
-	updateRoles(p.Cluster.GtmMaster.GtmMasterServer, "gtm_master")
+	updateRoles(p.Cluster.GtmMaster.GtmMasterServer, "gtmMaster")
 	p.Cluster.GtmMaster.ServerConn = getConnection(p.Cluster.GtmMaster.GtmMasterServer)
 
-	all_servers[p.St.GtmMasterServer] = struct{}{}
+	allServers[p.St.GtmMasterServer] = struct{}{}
 
 	// Put the slaves in the name:object so we can add these as children to the main object
-	gp := make(map[string]gtm_proxy)
-	cs := make(map[int]coordinator_slave)
-	ds := make(map[int]datanode_slave)
+	gp := make(map[string]gtmProxy)
+	cs := make(map[int]coordinatorSlave)
+	ds := make(map[int]datanodeSlave)
 
 	/*
-		First lets add gtm_proxies .. from the pgxc_ctl file how do you know what gtm_proxy needs to be configured
+		First lets add gtm_proxies .. from the pgxc_ctl file how do you know what gtmProxy needs to be configured
 		on what server? -- we'll get this info when we start doing the postgresql.conf, but how is this done..?
-		TODO: Findout how gtm_proxy is assigned to the servers in the pgxc_ctl.conf file
+		TODO: Findout how gtmProxy is assigned to the servers in the pgxc_ctl.conf file
 
 		Lets do the coordinator and datanode slaves first and put them in the map[string]coordinator/datanode
 
@@ -446,7 +446,7 @@ func (p *Pgctl_parser) MapToObj() {
 
 		for i, v := range p.St.GtmProxyServers {
 
-			gp[v] = gtm_proxy{
+			gp[v] = gtmProxy{
 				GtmProxyServer: v,
 				GtmProxyName:   p.St.GtmProxyNames[i],
 				GtmProxyPort:   p.St.GtmProxyPorts[i],
@@ -457,7 +457,7 @@ func (p *Pgctl_parser) MapToObj() {
 			// We'll add this as an array also, cause not every proxy and slave node may be mapped to something
 			p.Cluster.GTMProxies = append(p.Cluster.GTMProxies, gp[v])
 
-			all_servers[v] = struct{}{}
+			allServers[v] = struct{}{}
 		}
 	}
 
@@ -466,7 +466,7 @@ func (p *Pgctl_parser) MapToObj() {
 
 		for i, v := range p.St.CoordSlaveServers {
 
-			cs[i] = coordinator_slave{
+			cs[i] = coordinatorSlave{
 				CoordSlaveServer:     v,
 				CoordSlavePort:       p.St.CoordSlavePorts[i],
 				CoordSlavePoolerPort: p.St.CoordSlavePoolerPorts[i],
@@ -477,7 +477,7 @@ func (p *Pgctl_parser) MapToObj() {
 			}
 			//cs[v].ServerConn = getConnection(cs[v].CoordSlaveServer)
 			p.Cluster.CoordSlaves = append(p.Cluster.CoordSlaves, cs[i])
-			all_servers[v] = struct{}{}
+			allServers[v] = struct{}{}
 		}
 	}
 
@@ -486,7 +486,7 @@ func (p *Pgctl_parser) MapToObj() {
 
 		for i, v := range p.St.DatanodeSlaveServers {
 
-			ds[i] = datanode_slave{
+			ds[i] = datanodeSlave{
 				DatanodeSlaveServer:     v,
 				DatanodeSlavePort:       p.St.DatanodeSlavePorts[i],
 				DatanodeSlaveDir:        p.St.DatanodeSlaveDirs[i],
@@ -496,25 +496,25 @@ func (p *Pgctl_parser) MapToObj() {
 			//ds[v].ServerConn = getConnection(ds[v].DatanodeSlaveServer)
 			p.Cluster.DatanodeSlaves = append(p.Cluster.DatanodeSlaves, ds[i])
 
-			all_servers[v] = struct{}{}
+			allServers[v] = struct{}{}
 		}
 	}
 
 	// Loop over Coords
 	for i, v := range p.St.CoordMasterServers {
 
-		tmp_crd_slv := coordinator_slave{}
+		tmpCrdSlv := coordinatorSlave{}
 
 		// If this coord slaves are set and it exists, it'll get set
 		if p.St.CoordSlave {
 
 			if _, ok := cs[i]; ok {
 
-				tmp_crd_slv = cs[i]
+				tmpCrdSlv = cs[i]
 			}
 		}
 
-		p.Cluster.Coord = append(p.Cluster.Coord, coordinator_master{
+		p.Cluster.Coord = append(p.Cluster.Coord, coordinatorMaster{
 			CoordName:         p.St.CoordNames[i],
 			CoordMasterServer: v,
 			//			CoordArchLogDir: p.St.CoordArchLogDirs[i],
@@ -522,30 +522,30 @@ func (p *Pgctl_parser) MapToObj() {
 			CoordPort:         p.St.CoordPorts[i],
 			PoolerPort:        p.St.PoolerPorts[i],
 			CoordMaxWALSender: p.St.CoordMaxWALSenders[i],
-			CoordinatorSlave:  &tmp_crd_slv,
+			CoordinatorSlave:  &tmpCrdSlv,
 			ServerConn:        getConnection(v),
 		})
 
-		all_servers[v] = struct{}{}
+		allServers[v] = struct{}{}
 	}
 
 	// Loop over Datanodes
 	for i, v := range p.St.DatanodeMasterServers {
 
-		tmp_dn_slv := datanode_slave{}
+		tmpDnSlv := datanodeSlave{}
 
 		if p.St.DatanodeSlave {
 			if p.Cluster.HasDatanodeSlaves {
 				if _, ok := ds[i]; ok {
 
-					tmp_dn_slv = ds[i]
+					tmpDnSlv = ds[i]
 				}
 			}
 		}
 
 		fmt.Printf("trying to get connection for %v ... %+v \n", v, p.St.DatanodeNames[i])
 
-		p.Cluster.Datanodes = append(p.Cluster.Datanodes, datanode_master{
+		p.Cluster.Datanodes = append(p.Cluster.Datanodes, datanodeMaster{
 			DatanodeName:         p.St.DatanodeNames[i],
 			DatanodeMasterServer: v,
 			DatanodeMasterDir:    p.St.DatanodeMasterDirs[i],
@@ -554,26 +554,26 @@ func (p *Pgctl_parser) MapToObj() {
 			DatanodePoolerPort: p.St.DatanodePoolerPorts[i],
 			//			DatanodeMasterWALDir: p.St.DatanodeMasterWALDirs[i],
 			HasSlave:      p.St.DatanodeSlave,
-			DatanodeSlave: &tmp_dn_slv,
+			DatanodeSlave: &tmpDnSlv,
 			ServerConn:    getConnection(v),
 		})
 
-		all_servers[v] = struct{}{}
+		allServers[v] = struct{}{}
 	}
 
-	for k, _ := range all_servers {
+	for k := range allServers {
 
 		if len(k) > 0 {
 			p.Cluster.ServersList = append(p.Cluster.ServersList, k)
 		}
 	}
 
-	fmt.Println(all_servers)
+	fmt.Println(allServers)
 
 }
 
 func getConnection(s string) (c *spoc.ConnInfo) {
-	c = spoc.ClientConnections.GetServerByIp(s)
+	c = spoc.ClientConnections.GetServerByIP(s)
 	return
 
 }

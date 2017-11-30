@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/dminGod/ZooGuard/zg_config"
+	"github.com/dminGod/ZooGuard/zgConfig"
 	_ "github.com/lib/pq"
 )
 
@@ -59,17 +59,17 @@ func (p *PostConns) GetByServerAndRole(server string, role string) (con PostDB, 
 
 }
 
-func connectPostgres(v zg_config.Database) {
+func connectPostgres(v zgConfig.Database) {
 
 	var postdb PostDB
 	postdb.Name = v.DatabaseName
 	postdb.User = v.Username
 	postdb.Pass = v.Password
-	postdb.ParentAppName = v.Parent_App_Name
-	postdb.LinkedComponent = v.Linked_Component
-	postdb.ParentType = v.Parent_Type
-	postdb.ComponentRole = v.Component_Role
-	postdb.Identity = v.Db_Identity
+	postdb.ParentAppName = v.ParentAppName
+	postdb.LinkedComponent = v.LinkedComponent
+	postdb.ParentType = v.ParentType
+	postdb.ComponentRole = v.ComponentRole
+	postdb.Identity = v.DbIdentity
 
 	rand.Seed(time.Now().UTC().UnixNano())
 
@@ -171,16 +171,14 @@ func (p_db *PostDB) Query(s string) (retVal []map[string]interface{}) {
 	if err != nil {
 
 		fmt.Println("Error in closing rows")
-
-		return
 	} else {
 		fmt.Println("Success")
 		fmt.Println(retVal)
-		return
 	}
+	return
 }
 
-//Exec is used to run Insert query on Postgres-XL database
+//Execute is used to run Insert query on Postgres-XL database
 func (p_db *PostDB) Execute(s string) (err error) {
 
 	_, err = p_db.Conn.Exec(s)

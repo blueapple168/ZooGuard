@@ -15,7 +15,7 @@ func ParseTestFile() {
 
 	scanner := bufio.NewScanner(ff)
 
-	var p Pg_conf
+	var p PgConf
 
 	buf := make([]byte, 0, 64*1024)
 	scanner.Buffer(buf, 1024*1024)
@@ -26,7 +26,7 @@ func ParseTestFile() {
 		s += scanner.Text() + "\n"
 	}
 
-	p.Set_contents(s)
+	p.SetContents(s)
 	p.Parse()
 
 }
