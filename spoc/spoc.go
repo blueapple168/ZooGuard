@@ -7,6 +7,7 @@ import (
 
 	"github.com/dminGod/ZooGuard/zgConfig"
 	"golang.org/x/crypto/ssh"
+	"time"
 )
 
 //ConnInfo contains details regarding SSH connection of the servers
@@ -14,7 +15,20 @@ type ConnInfo struct {
 	ServerName   string
 	ServerIP     string
 	AppsInServer []string // D30, D40, Datanode Master, Datanode Slave, GTM, Postgresxl,
+
 	SSHConn      *ssh.Client
+	TimeDelta     int
+	ServerIssues  []struct{  IssueType string; AffectedDetails string; Message string; IssueCode string }
+
+	UlimitDetails  map[string]string  //  ulimit -a | awk -F '[[:space:]][[:space:]]+|) ' ' { print "\""$1","$3 }  '
+
+	// df -h | awk -F '[[:space:][:space:]]+' ' { print "{'size':"$2",\"used:\":"$3",\"available\":"$4 } '
+	HddDriveUtilization []struct{  Partition string;  SpaceAllocated string; SpaceUsed string; PercentageUsed int; LastChecked time.Time; HasIssues bool }
+	CpuCount		int
+	RamAvailable	int // Save the RAM in mb
+	LoadAverage		[]float32
+	CpuAdjustedLoadAverage []float32
+	
 }
 
 //ClientConns has information regarding the SSH connection of all the servers

@@ -7,6 +7,11 @@ import (
 	"github.com/dminGod/ZooGuard/spoc"
 )
 
+
+// Here we are first pulling the cluster configuration details from pgxc_ctl
+// and then we are populating the cluster struct configParsers.PgctlParser -- PgCluster
+
+
 var PgCluster configParsers.PgctlParser
 var PgConf configParsers.PGConfig
 
