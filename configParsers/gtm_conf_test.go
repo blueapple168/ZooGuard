@@ -92,9 +92,9 @@ gtm_connect_retry_interval = 1
 
 func TestGTMParse(t *testing.T) {
 
-	var p gtmConfig
+	var p GTMConfig
 	p.FileContents = sampleGtmConf
-	p.parse()
+	p.Parse()
 
 	/*
 		nodename = 'gtm_pxy1'

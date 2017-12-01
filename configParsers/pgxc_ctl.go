@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"errors"
 	"fmt"
-	//"github.com/dminGod/ZooGuard/log_collectors"
 	"os"
 	"regexp"
 	"strings"
@@ -28,7 +27,7 @@ func (p *PgctlParser) Init() {
 }
 
 //Parse parses the file from the FileLocation
-func (p *PgctlParser) Prase() {
+func (p *PgctlParser) Parse() {
 
 	// TODO : getting files directly is not correct -- make an abstraction that will return you
 	// This guy should not be bothered to get stuff from other systems on the network
@@ -61,7 +60,7 @@ func (p *PgctlParser) Prase() {
 	// Where its put in multiple times and we have the last most recent value
 	for scanner.Scan() { // internally, it advances token based on sperator
 
-		p.interpret_line(scanner.Text())
+		p.interpretLine(scanner.Text())
 	}
 
 	// Now that we have a variable to value mapping. Lets start filling our object
@@ -75,7 +74,7 @@ func (p *PgctlParser) ParseString(str string) {
 
 	for _, v := range strings.Split(str, "\n") {
 
-		p.interpret_line(v)
+		p.interpretLine(v)
 		fmt.Println(v)
 	}
 
@@ -83,7 +82,7 @@ func (p *PgctlParser) ParseString(str string) {
 }
 
 // Individual Line parsing, remove the comments, keep the key-value pairs
-func (p *PgctlParser) interpret_line(curLine string) {
+func (p *PgctlParser) interpretLine(curLine string) {
 
 	matBool, _ := regexp.Match("^( +|\t+)?[#-]", []byte(curLine))
 	hasEqualTo := strings.Contains(curLine, "=")
@@ -112,7 +111,7 @@ func (p *PgctlParser) interpret_line(curLine string) {
 	}
 }
 
-// This module will take the individual lines and start populating objects based on the lines
+//Populate module will take the individual lines and start populating objects based on the lines
 func (p *PgctlParser) Populate() {
 
 	// First we will just map our values and set them correctly in the flat string:(string/[]string) --

@@ -9,7 +9,7 @@ import (
 	"github.com/gocql/gocql"
 )
 
-//CassDb is used to store configuration details of cassandra database
+//CassDB is used to store configuration details of cassandra database
 type CassDB struct {
 	Host                  []string
 	UID                   string

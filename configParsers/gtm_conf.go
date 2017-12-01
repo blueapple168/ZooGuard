@@ -7,7 +7,8 @@ import (
 	"github.com/mitchellh/mapstructure"
 )
 
-type gtmConfig struct {
+//GTMConfig stores the configuration details parsed from the gtm config file
+type GTMConfig struct {
 	FileContents string
 
 	Nodename                string
@@ -25,7 +26,14 @@ type gtmConfig struct {
 	KvPairs                 map[string]string
 }
 
-func (gc *gtmConfig) parse() {
+//SetContents sets the parsed configuration file(string) as the file contents
+func (gc *GTMConfig) SetContents(fileContents string) {
+
+	gc.FileContents = fileContents
+}
+
+//Parse parses the file contents and prepares the GTMConfig object
+func (gc *GTMConfig) Parse() {
 
 	reBlank := regexp.MustCompile(`^[ \t]*$`)
 	reComment := regexp.MustCompile(`^[ \t]*#`)

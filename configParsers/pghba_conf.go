@@ -16,9 +16,9 @@ type pgHbaEntry struct {
 // PgHba is used to store pg_hba.conf values and to be able to
 // use the methods from other packages
 type PgHba struct {
-	Invalid_Entries []string
+	InvalidEntries []string
 	Entries         []pgHbaEntry
-	Server_name     string
+	ServerName     string
 	FileContents    string
 }
 
@@ -66,7 +66,7 @@ func (pg *PgHba) Parse() {
 
 		} else {
 
-			pg.Invalid_Entries = append(pg.Invalid_Entries, v)
+			pg.InvalidEntries = append(pg.InvalidEntries, v)
 		}
 	}
 

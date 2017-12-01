@@ -7,7 +7,6 @@ import (
 
 	"github.com/dminGod/ZooGuard/zgConfig"
 	"golang.org/x/crypto/ssh"
-	"time"
 )
 
 //ConnInfo contains details regarding SSH connection of the servers
@@ -15,20 +14,31 @@ type ConnInfo struct {
 	ServerName   string
 	ServerIP     string
 	AppsInServer []string // D30, D40, Datanode Master, Datanode Slave, GTM, Postgresxl,
-
 	SSHConn      *ssh.Client
-	TimeDelta     int
-	ServerIssues  []struct{  IssueType string; AffectedDetails string; Message string; IssueCode string }
 
-	UlimitDetails  map[string]string  //  ulimit -a | awk -F '[[:space:]][[:space:]]+|) ' ' { print "\""$1","$3 }  '
+	TimeDelta    int
+	ServerIssues []struct {
+		IssueType       string
+		AffectedDetails string
+		Message         string
+		IssueCode       string
+	}
+
+	UlimitDetails map[string]string //  ulimit -a | awk -F '[[:space:]][[:space:]]+|) ' ' { print "\""$1","$3 }  '
 
 	// df -h | awk -F '[[:space:][:space:]]+' ' { print "{'size':"$2",\"used:\":"$3",\"available\":"$4 } '
-	HddDriveUtilization []struct{  Partition string;  SpaceAllocated string; SpaceUsed string; PercentageUsed int; LastChecked time.Time; HasIssues bool }
-	CpuCount		int
-	RamAvailable	int // Save the RAM in mb
-	LoadAverage		[]float32
+	HddDriveUtilization []struct {
+		Partition      string
+		SpaceAllocated string
+		SpaceUsed      string
+		PercentageUsed int
+		LastChecked    time.Time
+		HasIssues      bool
+	}
+	CpuCount               int
+	RamAvailable           int // Save the RAM in mb
+	LoadAverage            []float32
 	CpuAdjustedLoadAverage []float32
-	
 }
 
 //ClientConns has information regarding the SSH connection of all the servers
@@ -49,7 +59,7 @@ func (c *ConnInfo) UpdateTag(tag string) (found bool) {
 	if !found {
 
 		c.AppsInServer = append(c.AppsInServer, tag)
-		fmt.Println(c.AppsInServer, c.ServerIP, c.SSHConn)
+		//fmt.Println(c.AppsInServer, c.ServerIP, c.SSHConn)
 		return
 	}
 
@@ -91,7 +101,7 @@ func (c *ClientConns) GetServerByName(name string) (con *ConnInfo) {
 
 		k := *v
 
-		fmt.Println(k.ServerName)
+		//fmt.Println(k.ServerName)
 
 		if name == k.ServerName {
 			con = v
@@ -101,11 +111,19 @@ func (c *ClientConns) GetServerByName(name string) (con *ConnInfo) {
 
 }
 
+//Conf variable is used to get the configuration details from the toml file
 var Conf zgConfig.ZgConfig
 
+//ClientConnections varibale is used to store configuration details of all servers
 var ClientConnections ClientConns
+
+//CassConnections variable is used to store configuration details of all cassandra databases
 var CassConnections CassConns
+
+//PostConnections variable is used to store configuration details of all postgres-xl databases
 var PostConnections PostConns
+
+//AppConnections variable is used to store configuration details of all applications
 var AppConnections AppConns
 
 func init() {
@@ -186,8 +204,7 @@ func (c *ConnInfo) RunCommand(s string) (retStr string) {
 		return
 	}
 
-		fmt.Printf("K is not nil %v", k)
-
+	fmt.Printf("K is not nil %v", k)
 
 	sess, err := k.NewSession()
 

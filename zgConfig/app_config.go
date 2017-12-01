@@ -17,7 +17,7 @@ type http struct {
 }
 
 type RemoteServer struct {
-	IpOrHost         string
+	IPOrHost         string
 	ConnectionMethod string // This will be password / key
 
 	Username string
@@ -100,14 +100,15 @@ type ZgConfig struct {
 }
 
 // Dont need to add the .toml in the name here
-var configFile  = "zg.toml"
+var configFile = "zg.toml"
 
 // With trailing slash
 var linuxConfigFolders = []string{"/etc/"}
 var windowsConfigFolders = []string{"\\zg\\"}
-var ViConfig *viper.Viper
+var viConfig *viper.Viper
 var configLoaded bool
 
+//Config is used to load the configuration from the toml file
 var Config ZgConfig
 
 /*
@@ -123,6 +124,7 @@ func init() {
 
 }
 
+//GetConfiguration gets the configuration details from the .toml file
 func GetConfiguration() {
 
 	configFile, err := getConfigFile()
@@ -138,16 +140,14 @@ func GetConfiguration() {
 		os.Exit(1)
 	}
 
-	ViConfig = viper.New()
+	viConfig = viper.New()
 
-	ViConfig.SetConfigFile(configFile)
-	ViConfig.AutomaticEnv()
+	viConfig.SetConfigFile(configFile)
+	viConfig.AutomaticEnv()
 
-	verr := ViConfig.ReadInConfig()
+	verr := viConfig.ReadInConfig()
 
-	fmt.Println(Config)
-	e2 := ViConfig.Unmarshal(&Config)
-
+	e2 := viConfig.Unmarshal(&Config)
 
 	if e2 != nil {
 
@@ -163,22 +163,21 @@ func GetConfiguration() {
 
 }
 
-//GetConfig gets the configuration details from the .toml file
+//GetConfig returns Config that holds the configuration from the toml file
 func GetConfig() ZgConfig {
 
 	if configLoaded == false {
 
 		GetConfiguration()
 	}
-		return Config
-
+	return Config
 
 }
 
 //ShowConfig shows the configuration from the .toml file
 func ShowConfig() {
 
-	fmt.Println(ViConfig.AllSettings())
+	fmt.Println(viConfig.AllSettings())
 
 }
 

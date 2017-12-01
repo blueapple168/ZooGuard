@@ -172,10 +172,10 @@ type gtmMaster struct {
 	GtmExtraConfig               string
 	GtmMasterSpecificExtraConfig string
 
-	HasSlave            bool
-	GtmSlave            gtmSlave
-	ServerConn          *spoc.ConnInfo
-	ServerConfiguration PgConf
+	HasSlave         bool
+	GtmSlave         gtmSlave
+	ServerConn       *spoc.ConnInfo
+	GtmConfiguration GTMConfig
 }
 
 type gtmSlave struct {
@@ -189,7 +189,7 @@ type gtmSlave struct {
 	GtmSlaveDir                 string
 	GtmSlaveSpecificExtraConfig string
 	ServerConn                  *spoc.ConnInfo
-	ServerConfiguration         PgConf
+	GtmConfiguration            GTMConfig
 }
 
 type gtmProxy struct {
@@ -202,8 +202,8 @@ type gtmProxy struct {
 	ConnectedCoordSlaves     []*coordinatorSlave
 	ConnectedDatanodeMasters []*datanodeMaster
 	ConnectedDatanodeSlaves  []*datanodeSlave
-	ServerConfiguration      PgConf
 	ServerConn               *spoc.ConnInfo
+	GtmConfiguration         GTMConfig
 }
 
 type coordinatorMaster struct {
@@ -313,12 +313,28 @@ type PGConfig struct {
 	Role                string
 }
 
+//GTconfig is a struct to store values of the gtms temporarily
+type GTconfig struct {
+	Name    string
+	Server  string
+	Port    string
+	Dir     string
+	Conn    *spoc.ConnInfo
+	IsProxy bool
+}
+
 //PgNode interface provides with the methods to get and set the configuration of all the nodes
 type PgNode interface {
 	GetPgConfig() PGConfig
 	SetPgConfig(PgConf) bool
 	SetIdentConfig(PgIdent) bool
 	SetHbaConfig(PgHba) bool
+}
+
+//GtNode interface provides with methods to get and set the configuration of gtms
+type GtNode interface {
+	GetGtConfig() GTconfig
+	SetGtConfig(GTMConfig) bool
 }
 
 func (d *datanodeSlave) GetPgConfig() (k PGConfig) {
@@ -453,5 +469,59 @@ func (c *coordinatorMaster) SetHbaConfig(ph PgHba) (retVal bool) {
 func (c *coordinatorSlave) SetHbaConfig(ph PgHba) (retVal bool) {
 
 	c.HbaConfiguration = ph
+	return
+}
+
+func (g *gtmMaster) GetGtConfig() (gt GTconfig) {
+	gt = GTconfig{
+		Name:    g.GtmName,
+		Server:  g.GtmMasterServer,
+		Port:    g.GtmMasterServer,
+		Dir:     g.GtmMasterDir,
+		Conn:    g.ServerConn,
+		IsProxy: false,
+	}
+	return
+}
+
+func (g *gtmSlave) GetGtConfig() (gt GTconfig) {
+	gt = GTconfig{
+		Name:    g.GtmSlaveName,
+		Server:  g.GtmSlaveServer,
+		Port:    g.GtmSlavePort,
+		Dir:     g.GtmSlaveDir,
+		Conn:    g.ServerConn,
+		IsProxy: false,
+	}
+	return
+}
+
+func (g *gtmProxy) GetGtConfig() (gt GTconfig) {
+	gt = GTconfig{
+		Name:    g.GtmProxyName,
+		Server:  g.GtmProxyServer,
+		Port:    g.GtmProxyPort,
+		Dir:     g.GtmProxyDir,
+		Conn:    g.ServerConn,
+		IsProxy: true,
+	}
+	return
+}
+
+func (g *gtmMaster) SetGtConfig(pg GTMConfig) (retVal bool) {
+
+	g.GtmConfiguration = pg
+	return
+}
+
+func (g *gtmSlave) SetGtConfig(pg GTMConfig) (retVal bool) {
+
+	g.GtmConfiguration = pg
+	return
+}
+
+func (g *gtmProxy) SetGtConfig(pg GTMConfig) (retVal bool) {
+
+	g.GtmConfiguration = pg
 	return
 }
