@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"net"
+	"time"
 
 	"github.com/dminGod/ZooGuard/zgConfig"
 	"golang.org/x/crypto/ssh"
@@ -17,33 +18,36 @@ type ConnInfo struct {
 	SSHConn      *ssh.Client
 
 	TimeDelta    int
-	ServerIssues []struct {
-		IssueType       string
-		AffectedDetails string
-		Message         string
-		IssueCode       string
-	}
+	ServerIssues []ServerIss
 
 	UlimitDetails map[string]string //  ulimit -a | awk -F '[[:space:]][[:space:]]+|) ' ' { print "\""$1","$3 }  '
 
-	// df -h | awk -F '[[:space:][:space:]]+' ' { print "{'size':"$2",\"used:\":"$3",\"available\":"$4 } '
-	HddDriveUtilization []struct {
-		Partition      string
-		SpaceAllocated string
-		SpaceUsed      string
-		PercentageUsed int
-		LastChecked    time.Time
-		HasIssues      bool
-	}
+	// df -h | awk -F '[[:space:][:space:]]+' ' { print "{size:"$2",\"used:\":"$3",\"available\":"$4 "}" } '
+	HddDriveUtilization    []HddUtil
 	CpuCount               int
 	RamAvailable           int // Save the RAM in mb
-	LoadAverage            []float32
+	LoadAverage            []float64
 	CpuAdjustedLoadAverage []float32
 }
 
 //ClientConns has information regarding the SSH connection of all the servers
 type ClientConns struct {
 	Connections []*ConnInfo
+}
+
+type HddUtil struct {
+	Partition      string
+	SpaceAllocated string
+	SpaceUsed      string
+	PercentageUsed string
+	LastChecked    time.Time
+	HasIssues      bool
+}
+type ServerIss struct {
+	IssueType       string
+	AffectedDetails string
+	Message         string
+	IssueCode       string
 }
 
 //UpdateTag adds the Role of the server as a tag if not already present in the list
@@ -186,7 +190,7 @@ func (c *ConnInfo) RunCommand(s string) (retStr string) {
 
 	var err error
 
-	fmt.Printf("%+v", c)
+	//fmt.Printf("%+v", c)
 
 	if c.SSHConn == nil {
 
