@@ -1,50 +1,32 @@
 
-HL :
-    ZG should be a server binary :
-        The command line will be another shell application that can call ZG deamon.
+## configParsers:
+This module is able to read specific configuration files and represent that content as a go struct.
+
+    ### gtm_conf.go
+        Has the model and parser in the same file. Uses mapstructure.Decode to map struct to kv extracted data.
+
+    ### pg_ident_conf.go
+        Has model and parser with it. Tracks invalid entries as well.
+
+    ### pghba_conf.go
+        Has model and parser.
+
+----
+    ### pgxc_ctl_model.go
+        Holds the model. Has 2 models, one, the original is flat with an implict indexed link reference between nodes.
+        Then the second one that has an explicit reference between components to make the actual struct.
+
+    ### pgxc_ctl.go
+        Parses the file content and fills the flat struct, then loops over the flat struct and builds the proper
+        go struct.
+----
+
+    ### postgresql_conf_model.go
+
+    ### postgresql_conf.go
+
+----
 
 
-### cli
-    This will be used for showing and doing stuff on the command line
-
-    cl_render : Cluster Render Shows the pgxc_ctl config in a table format. Currently just showcase type. Need work.
-
-
-## Spoc:
-    spoc.go : SPOC (Single Point Of Contact) facilitates communication between teams of people. Kind of a similar concept
-        the calls would be routed through this interface(?) so the means of communication can be abstracted away from the
-        calling modules so different ways can be used to communicate.
-
-
-## Parsers:
-
-    ### gtm
-
-    ### postgres_conf
-        pg_ident_conf.go            -- pg_ident.conf file
-        pghba_conf.go               -- pg_hba.conf
-        postgresql_conf.go          -- postgresql.conf
-        postgresql_live_config.go   -- This is live configuration from the running instance
-                                        It is possible that the config on the file is old and not the actual config.
-
-    ### pgctl
-        model_conf_file.go :
-            A struct that has all the settings as they are represented in the pgxc_ctl file
-                this is used for taking the values from the file and puts them in go.
-
-        model_logical_object.go:
-            This is the logical representation of the cluster.
-
-        pgxc_conf_file_parser.go
-            This is the file that parsers actual conf file and populates the model_conf object first and then the logical.
-
-        util.go
-            Common utility functions to work with the pgxc file to clean spaces and return different types of data.
-
-
-
-
-
-
-
-
+    ### util.go
+    Simple methods to return particular data types, to clean strings and check counts.

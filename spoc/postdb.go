@@ -120,7 +120,6 @@ func connectPostgres(v zgConfig.Database) {
 			fmt.Println("Added db connection to dbpool")
 		}
 	}
-
 }
 
 //Query is used to run Select query on Postgres-XL database
