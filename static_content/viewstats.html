@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ZooGuard-View Stats</title>
+    <p align="left"><h2>Information Of Metadata</h2></p>
+    <style >
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+    </style>
+</head>
+<body  bgcolor = #a9a9a9>
+<p align="left">
+<table style="width:100%">
+    <tr>
+        <th>Parameters</th>
+        <th>Values</th>
+        </tr>
+    <tr>
+        <td>Server IP</td>
+        <td>{{.ServerIP}}</td>
+    </tr>
+    <tr>
+        <td>Server Name</td>
+        <td>{{.ServerName}}</td>
+    </tr>
+    <tr>
+        <td>Applications on server</td>
+        <td>{{.AppsInServer}}</td>
+    </tr>
+    <tr>
+        <td>Available RAM</td>
+        <td>{{.RamAvailable}}</td>
+    </tr>
+    <tr>
+        <td>CPU Count</td>
+        <td>{{.CpuCount}}</td>
+    </tr>
+    <tr>
+        <td>Time difference in ms</td>
+        <td>{{.TimeDelta}}</td>
+    </tr>
+    <tr>
+        <td>Load Averages</td>
+        <td>{{.LoadAverage}}</td>
+    </tr>
+    <tr>
+        <td>OS Version</td>
+        <td>{{.OSVersion}}</td>
+    </tr>
+    <tr>
+        <td>HDD Utilization</td>
+        <td>{{.HddDriveUtilization}}</td>
+    </tr>
+    <tr>
+        <td>Ulimit Details</td>
+        <td>{{.UlimitDetails}}</td>
+    </tr>
+</table>
+</p>
+</body>
+</html>

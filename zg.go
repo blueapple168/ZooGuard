@@ -5,8 +5,9 @@ import (
 
 	//"github.com/dminGod/ZooGuard/configParsers"
 	"github.com/dminGod/ZooGuard/spoc"
-	"github.com/dminGod/ZooGuard/targetApplications/postgres_xl"
-	//"github.com/dminGod/ZooGuard/zg_config"
+	"github.com/dminGod/ZooGuard/targetApplications"
+	"github.com/dminGod/ZooGuard/static_content"
+
 )
 
 func main() {
@@ -24,22 +25,8 @@ func main() {
 	//fmt.Println(rr)
 	//j.Execute(`INSERT INTO cassandra_test.local_service_requests_new8 ( local_service_requests_new8_pk,val9_key) VALUES (  1d5568e6-8c77-4401-9d90-641edc7c7cac, {'25102017185122001','25102017185122002','25102017185122003'} ) `)
 
-
-	/*appc := spoc.AppConnections.Connections[1]
-	server := appc.Server
-	fmt.Println("server is", server)
-	con := fmt.Sprintf("cat %s", appc.ConfigFile)
-	fmt.Println(con)
-	str := spoc.RunCommand(server, con)
-	//_ = str
-
-	var p configParsers.PgctlParser
-	fmt.Println("Parse string")
-	p.Init()
-	fmt.Println("Parse string")
-	p.ParseString(str)
-	//fmt.Println(str)
-	fmt.Println(p.Cluster.GTMProxies)*/
-	targetApplications.LoadCluster()
-
+	//targetApplications.LoadCluster()
+	//targetApplications.LoadHector()
+	targetApplications.InitializeServer()
+	static_content.HttpServer()
 }

@@ -452,7 +452,7 @@ func (p *PgctlParser) MapToObj() {
 				GtmProxyDir:    p.St.GtmProxyDirs[i],
 				ServerConn:     getConnection(v),
 			}
-
+			updateRoles(gp[v].GtmProxyServer, "gtmProxy")
 			// We'll add this as an array also, cause not every proxy and slave node may be mapped to something
 			p.Cluster.GTMProxies = append(p.Cluster.GTMProxies, gp[v])
 
@@ -475,6 +475,7 @@ func (p *PgctlParser) MapToObj() {
 				ServerConn:           getConnection(v),
 			}
 			//cs[v].ServerConn = getConnection(cs[v].CoordSlaveServer)
+			updateRoles(cs[i].CoordSlaveServer, "coordSlave")
 			p.Cluster.CoordSlaves = append(p.Cluster.CoordSlaves, cs[i])
 			allServers[v] = struct{}{}
 		}
@@ -493,6 +494,7 @@ func (p *PgctlParser) MapToObj() {
 				ServerConn:              getConnection(v),
 			}
 			//ds[v].ServerConn = getConnection(ds[v].DatanodeSlaveServer)
+			updateRoles(ds[i].DatanodeSlaveServer, "datanodeSlave")
 			p.Cluster.DatanodeSlaves = append(p.Cluster.DatanodeSlaves, ds[i])
 
 			allServers[v] = struct{}{}

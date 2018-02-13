@@ -89,21 +89,28 @@ type Database struct {
 	CassandraWriteConsistency      int
 }
 
+type File struct {
+	FolderPath	string
+}
+
 //ZgConfig stores all the information regarding servers, database, applications
 // received from the config file
 type ZgConfig struct {
 	Zgconf   zgConfiguration
 	HTTP     http
+	File File
 	Servers  []Server
 	Apps     []App
 	Database []Database
+
+
 }
 
 // Dont need to add the .toml in the name here
 var configFile = "zg.toml"
 
 // With trailing slash
-var linuxConfigFolders = []string{"/etc/"}
+var linuxConfigFolders = []string{"/opt/damocles/conf/"}
 var windowsConfigFolders = []string{"\\zg\\"}
 var viConfig *viper.Viper
 var configLoaded bool
@@ -308,3 +315,4 @@ func fileExists(curFile string) (retBool bool) {
 
 	return
 }
+

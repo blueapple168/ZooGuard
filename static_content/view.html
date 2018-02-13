@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ZooGuard</title>
+    <p align="left"><h2>Information Of Metadata</h2></p>
+    <style >
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+    </style>
+</head>
+<body  bgcolor = #a9a9a9>
+<p align="left">
+<table style="width:100%">
+    <tr>
+        <th>FileName</th>
+        <th>Size</th>
+        <th>LastModified</th>
+        <th>Type</th>
+        <th>Details</th>
+    </tr>
+{{range .FileList}}
+    <tr>
+        <td>{{.FileName}}</td>
+        <td>{{.Size}}</td>
+        <td>{{.LastModified}}</td>
+        <td>{{.Type}}</td>
+        <td><a href="/content/{{.FileName}}" target="_blank">View</a>
+            <a href="/download/{{.FileName}}" >Download</a>
+        </td>
+    </tr>
+{{end}}
+</table>
+</p>
+<p><a href="servers.html" target="_blank">Servers</a></p>
+<p><a href="/databases" target="_blank">Databases</a> </p>
+</body>
+</html>

@@ -14,20 +14,23 @@ import (
 type ConnInfo struct {
 	ServerName   string
 	ServerIP     string
+	Environment	 string
 	AppsInServer []string // D30, D40, Datanode Master, Datanode Slave, GTM, Postgresxl,
 	SSHConn      *ssh.Client
 
-	TimeDelta    int
+	OSVersion    string
+	TimeDelta    int64
 	ServerIssues []ServerIss
 
 	UlimitDetails map[string]string //  ulimit -a | awk -F '[[:space:]][[:space:]]+|) ' ' { print "\""$1","$3 }  '
 
 	// df -h | awk -F '[[:space:][:space:]]+' ' { print "{size:"$2",\"used:\":"$3",\"available\":"$4 "}" } '
 	HddDriveUtilization    []HddUtil
+	HddLastChecked         time.Time
 	CpuCount               int
 	RamAvailable           int // Save the RAM in mb
 	LoadAverage            []float64
-	CpuAdjustedLoadAverage []float32
+	CpuAdjustedLoadAverage []float64
 }
 
 //ClientConns has information regarding the SSH connection of all the servers
@@ -40,8 +43,8 @@ type HddUtil struct {
 	SpaceAllocated string
 	SpaceUsed      string
 	PercentageUsed string
-	LastChecked    time.Time
-	HasIssues      bool
+
+	HasIssues bool
 }
 type ServerIss struct {
 	IssueType       string
@@ -158,6 +161,7 @@ func init() {
 			conninfo.ServerIP = v.ServerIP
 			conninfo.ServerName = v.ServerName
 			conninfo.SSHConn = c
+			conninfo.Environment = v.Environment
 
 			ClientConnections.Connections = append(ClientConnections.Connections, &conninfo)
 		}

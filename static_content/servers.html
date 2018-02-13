@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ZooGuard-Servers</title>
+    <p align="left"><h2>Information Of Metadata</h2></p>
+    <style >
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+    </style>
+</head>
+<body  bgcolor = #a9a9a9>
+<p align="left">
+<table style="width:100%">
+    <tr>
+        <th>Servers</th>
+        <th>Environment</th>
+        <th>Action</th>
+        </tr>
+{{range .Connections}}
+    <tr>
+        <td>{{.ServerIP}}</td>
+        <td>{{.Environment}}</td>
+        <td><a href="/viewstats/{{.ServerName}}" target="_blank">View Stats</a></td>
+
+    </tr>
+{{end}}
+</table>
+</p>
+</body>
+</html>
