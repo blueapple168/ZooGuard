@@ -527,6 +527,8 @@ func (p *PgctlParser) MapToObj() {
 			ServerConn:        getConnection(v),
 		})
 
+		updateRoles(p.Cluster.Coord[i].CoordMasterServer, "coordMaster")
+
 		allServers[v] = struct{}{}
 	}
 
@@ -558,6 +560,8 @@ func (p *PgctlParser) MapToObj() {
 			DatanodeSlave: &tmpDnSlv,
 			ServerConn:    getConnection(v),
 		})
+
+		updateRoles(p.Cluster.Datanodes[i].DatanodeMasterServer, "datanodeMaster")
 
 		allServers[v] = struct{}{}
 	}
