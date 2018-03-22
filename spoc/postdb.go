@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/dminGod/ZooGuard/zgConfig"
+	"github.com/dminGod/ZooGuard/zgCode"
 	// lib/pq is required to run postgres queries
 	_ "github.com/lib/pq"
 )

@@ -3,11 +3,12 @@ package spoc
 import (
 	"fmt"
 
-	"github.com/dminGod/ZooGuard/zgConfig"
+	"github.com/dminGod/ZooGuard/zgCode"
 )
 
 //AppConfigure is used to store configuration details of the application
 type AppConfigure struct {
+
 	ApplicationType      string
 	ApplicationUniqueKey string
 	Server               string

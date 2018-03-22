@@ -5,7 +5,6 @@ import (
 
 	//"github.com/dminGod/ZooGuard/configParsers"
 	"github.com/dminGod/ZooGuard/spoc"
-	"github.com/dminGod/ZooGuard/targetApplications/postgres_xl"
 	//"github.com/dminGod/ZooGuard/zg_config"
 )
 
@@ -36,10 +35,11 @@ func main() {
 	var p configParsers.PgctlParser
 	fmt.Println("Parse string")
 	p.Init()
+
 	fmt.Println("Parse string")
 	p.ParseString(str)
 	//fmt.Println(str)
 	fmt.Println(p.Cluster.GTMProxies)*/
-	targetApplications.LoadCluster()
+	// targetApplications.LoadCluster()
 
 }

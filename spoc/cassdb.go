@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/dminGod/ZooGuard/zgConfig"
+	"github.com/dminGod/ZooGuard/zgCode"
 	"github.com/gocql/gocql"
 )
 

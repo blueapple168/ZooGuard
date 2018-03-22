@@ -1,4 +1,6 @@
 
+
+
 ## configParsers:
 This module is able to read specific configuration files and represent that content as a go struct.
 
@@ -11,22 +13,25 @@ This module is able to read specific configuration files and represent that cont
     ### pghba_conf.go
         Has model and parser.
 
-----
+
     ### pgxc_ctl_model.go
         Holds the model. Has 2 models, one, the original is flat with an implict indexed link reference between nodes.
         Then the second one that has an explicit reference between components to make the actual struct.
-
     ### pgxc_ctl.go
         Parses the file content and fills the flat struct, then loops over the flat struct and builds the proper
         go struct.
-----
 
     ### postgresql_conf_model.go
-
     ### postgresql_conf.go
-
-----
-
 
     ### util.go
     Simple methods to return particular data types, to clean strings and check counts.
+
+--- --- ---
+## spoc -- single point of contact
+    This module is supposed to be a single place to interact with target systems -- like a driver layer to the target
+    applications.
+
+    cassdb  -- connect to and run queries on cassandra targets
+    postdb  -- connect to postgres, run query and execute sql -- also one search method for finding servers by name and component type, it returns a database connection
+    spoc    -- this has ssh connection to target systems (should be named ssh (?))

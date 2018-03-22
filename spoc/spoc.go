@@ -6,7 +6,7 @@ import (
 	"net"
 	"time"
 
-	"github.com/dminGod/ZooGuard/zgConfig"
+	"github.com/dminGod/ZooGuard/zgCode"
 	"golang.org/x/crypto/ssh"
 )
 
@@ -32,10 +32,12 @@ type ConnInfo struct {
 
 //ClientConns has information regarding the SSH connection of all the servers
 type ClientConns struct {
+
 	Connections []*ConnInfo
 }
 
 type HddUtil struct {
+
 	Partition      string
 	SpaceAllocated string
 	SpaceUsed      string
@@ -43,7 +45,9 @@ type HddUtil struct {
 	LastChecked    time.Time
 	HasIssues      bool
 }
+
 type ServerIss struct {
+
 	IssueType       string
 	AffectedDetails string
 	Message         string
